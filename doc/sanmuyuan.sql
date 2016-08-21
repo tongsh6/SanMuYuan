@@ -6,12 +6,12 @@ use sanmuyuan;
 -- ----------------------------
 DROP TABLE IF EXISTS `SYS_USER`;
 CREATE TABLE `SYS_USER` (
-  `USERID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `UNO` varchar(50) NOT NULL,
-  `UNAME` varchar(50) NOT NULL,
-  `UTYPE` int DEFAULT '2',
-  `PWD` varchar(100) DEFAULT '123456',
-  `CREATEDATE` DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  `userid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `uno` varchar(50) NOT NULL,
+  `uname` varchar(50) NOT NULL,
+  `utype` int DEFAULT '2',
+  `pwd` varchar(100) DEFAULT '123456',
+  `createdate` DATETIME DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`userid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
@@ -26,15 +26,15 @@ INSERT INTO `SYS_USER` VALUES ('2', '0001','管理员',2,'123456',CURRENT_TIMEST
 -- ----------------------------
 DROP TABLE IF EXISTS `MENU_TREE`;
 CREATE TABLE `MENU_TREE` (
-  `MENUID` bigint(10) NOT NULL AUTO_INCREMENT,
-  `MENUNAME` varchar(20) NOT NULL,
-  `MENUCODE` char(5) NOT NULL,
-  `TREENO` char(9) NOT NULL,
-  `PMID` int(10) default NULL,
-  `ISHIDDEN` CHAR(1) default 'S',
-  `ISLEAF` CHAR(1) default '0',
-  `SORTNO` int ,
-  PRIMARY KEY (`MENUID`)
+  `menuid` bigint(10) NOT NULL AUTO_INCREMENT,
+  `menuname` varchar(20) NOT NULL,
+  `menucode` char(5) NOT NULL,
+  `treeno` char(9) NOT NULL,
+  `pmid` int(10) default NULL,
+  `ishidden` CHAR(1) default 'S',
+  `isleaf` CHAR(1) default '0',
+  `sortno` int ,
+  PRIMARY KEY (`menuid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -52,15 +52,15 @@ INSERT INTO `MENU_TREE` VALUES ('6', '综合查询', '106', '001', NULL, 'S', '0
 -- ----------------------------
 DROP TABLE IF EXISTS `WEIXIN_USER`;
 CREATE TABLE `WEIXIN_USER` (
-  `OPENID` varchar(200) NOT NULL,
-  `NICKNAME` varchar(200) default NULL,
-  `USERNAME` varchar(100) default NULL,
-  `PHONENO` varchar(20) default NULL,
-  `ADDRESSED` varchar(100) default NULL,
-  `LINKNAME` varchar(100) default NULL,
-  `lINKTELNO` varchar(100) default NULL,
-  `REMARK` varchar(100) default NULL,
-  PRIMARY KEY (`OPENID`)
+  `openid` varchar(200) NOT NULL,
+  `nickname` varchar(200) default NULL,
+  `username` varchar(100) default NULL,
+  `phoneno` varchar(20) default NULL,
+  `addressed` varchar(100) default NULL,
+  `linkname` varchar(100) default NULL,
+  `linktelno` varchar(100) default NULL,
+  `remark` varchar(100) default NULL,
+  PRIMARY KEY (`openid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
@@ -70,9 +70,9 @@ CREATE TABLE `WEIXIN_USER` (
 -- ----------------------------
 DROP TABLE IF EXISTS `COMMODITIES`;
 CREATE TABLE `COMMODITIES` (
-  `CID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `CNAME` varchar(50) NOT NULL,
-  PRIMARY KEY (`CID`)
+  `cid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `cname` varchar(50) NOT NULL,
+  PRIMARY KEY (`cid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -86,12 +86,12 @@ INSERT INTO `COMMODITIES` VALUES ('2', '鸡蛋');
 -- ----------------------------
 DROP TABLE IF EXISTS `PRODUCT`;
 CREATE TABLE `PRODUCT` (
-  `PRODUCTID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `PRODUCTNAME` varchar(50) NOT NULL,
-  `CYCLE` varchar(50) NOT NULL,
-  `PRICE` double(14,2) NOT NULL default 0,
-  `REMARK` varchar(150) default null,
-  PRIMARY KEY (`PRODUCTID`)
+  `productid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `productname` varchar(50) NOT NULL,
+  `cycle` varchar(50) NOT NULL,
+  `price` double(14,2) NOT NULL default 0,
+  `remark` varchar(150) default null,
+  PRIMARY KEY (`productid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -99,11 +99,11 @@ CREATE TABLE `PRODUCT` (
 -- ----------------------------
 DROP TABLE IF EXISTS `PRODUCT_ITEM`;
 CREATE TABLE `PRODUCT_ITEM` (
-  `ITEMID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `PRODUCTID` bigint(20) NOT NULL,
-  `CID` bigint(20) NOT NULL,
-  `ITEMNUMBER` bigint(20) NOT NULL default 1,
-  PRIMARY KEY (`ITEMID`)
+  `itemid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `productid` bigint(20) NOT NULL,
+  `cid` bigint(20) NOT NULL,
+  `itemnumber` bigint(20) NOT NULL default 1,
+  PRIMARY KEY (`itemid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -111,12 +111,12 @@ CREATE TABLE `PRODUCT_ITEM` (
 -- ----------------------------
 DROP TABLE IF EXISTS `ORDERS`;
 CREATE TABLE `ORDERS` (
-  `ORDERID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `OPENID` varchar(255) NOT NULL,
-  `PRODUCTID` bigint(20) NOT NULL,
-  `PRICE` double(14,2) NOT NULL default 0,
-  `REMARK` varchar(255) default NULL,
-  PRIMARY KEY (`ORDERID`)
+  `orderid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `openid` varchar(255) NOT NULL,
+  `productid` bigint(20) NOT NULL,
+  `price` double(14,2) NOT NULL default 0,
+  `remark` varchar(255) default NULL,
+  PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -124,13 +124,13 @@ CREATE TABLE `ORDERS` (
 -- ----------------------------
 DROP TABLE IF EXISTS `DISTRIBUTION_PLAN`;
 CREATE TABLE `DISTRIBUTION_PLAN` (
-  `PLANID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ORDERID` bigint(20) NOT NULL,
-  `PRODUCTID` bigint(20) NOT NULL,
-  `PLANDATE` varchar(10) NOT NULL,
-  `PLANSTATE` char(1) default '2',
-  `REMARK` varchar(255) default NULL,
-  PRIMARY KEY (`PLANID`)
+  `planid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `orderid` bigint(20) NOT NULL,
+  `productid` bigint(20) NOT NULL,
+  `plandate` varchar(10) NOT NULL,
+  `planstate` char(1) default '2',
+  `remark` varchar(255) default NULL,
+  PRIMARY KEY (`planid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -138,11 +138,11 @@ CREATE TABLE `DISTRIBUTION_PLAN` (
 -- ----------------------------
 DROP TABLE IF EXISTS `PLAN_ITEM`;
 CREATE TABLE `PLAN_ITEM` (
-  `ITEMID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `PLANID` bigint(20) NOT NULL,
-  `CID` bigint(20) NOT NULL,
-  `ITEMNUMBER` bigint(20) NOT NULL default 1,
-  PRIMARY KEY (`ITEMID`)
+  `itemid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `planid` bigint(20) NOT NULL,
+  `cid` bigint(20) NOT NULL,
+  `itemnumber` bigint(20) NOT NULL default 1,
+  PRIMARY KEY (`itemid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -150,12 +150,12 @@ CREATE TABLE `PLAN_ITEM` (
 -- ----------------------------
 DROP TABLE IF EXISTS `TMESSAGE`;
 CREATE TABLE `TMESSAGE` (
-  `MSGID` bigint(20) NOT NULL AUTO_INCREMENT,
-  `OPENID` bigint(200) DEFAULT NULL,
-  `MSGTITLE` varchar(200) DEFAULT NULL,
-  `MSG` text DEFAULT NULL,
-  `CREATEDATE` DATETIME DEFAULT CURRENT_TIMESTAMP(),
-  PRIMARY KEY (`MSGID`)
+  `msgid` bigint(20) NOT NULL AUTO_INCREMENT,
+  `openid` bigint(200) DEFAULT NULL,
+  `msgtitle` varchar(200) DEFAULT NULL,
+  `msg` text DEFAULT NULL,
+  `createdate` DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  PRIMARY KEY (`msgid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 
