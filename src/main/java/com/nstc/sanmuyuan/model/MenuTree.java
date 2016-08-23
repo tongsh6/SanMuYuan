@@ -1,5 +1,7 @@
 package com.nstc.sanmuyuan.model;
 
+import java.util.List;
+
 import com.nstc.sanmuyuan.model.base.BaseMenuTree;
 
 /**
@@ -8,4 +10,14 @@ import com.nstc.sanmuyuan.model.base.BaseMenuTree;
 @SuppressWarnings("serial")
 public class MenuTree extends BaseMenuTree<MenuTree> {
 	public static final MenuTree dao = new MenuTree();
+
+	public List<MenuTree> list() {
+		return find("select menuname,menucode from menu_tree order by sortno");
+	}
+
+	public List<MenuTree> getMenuByUser(SysUser user) {
+		String strSql = "select menuname,menucode from menu_tree where utype>=? order by sortno";
+		return find(strSql, user.getUtype());
+	}
+
 }
