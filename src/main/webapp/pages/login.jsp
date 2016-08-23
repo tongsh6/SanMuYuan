@@ -110,7 +110,7 @@
 							class="form-controlspan12 form-control">${pwdMsg}
 					</div>
 					<input type="button" class="btn btn-primary pull-right" value="登录"
-						id="loginbtn" /> <label class="remember-me" id="errorMsg">${loginMsg}</label>
+						id="loginbtn" /> <label class="remember-me" style="color: red;" id="errorMsg">${loginMsg}</label>
 					<div class="clearfix"></div>
 				</form>
 			</div>
@@ -126,7 +126,13 @@
 			$('.demo-cancel-click').click(function() {
 				return false;
 			});
-
+			document.onkeydown = function(e) {
+				var theEvent = window.event || e;
+				var code = theEvent.keyCode || theEvent.which;
+				if (code == 13) {
+					$("#loginbtn").click();
+				}
+			};
 			$("#loginbtn").click(function() {
 				var formParam = $("#loginform").serialize();//序列化表格内容为字符串 
 				//开始发送数据
