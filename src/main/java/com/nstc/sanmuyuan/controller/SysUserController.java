@@ -1,5 +1,7 @@
 package com.nstc.sanmuyuan.controller;
 
+import java.util.List;
+
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.core.Controller;
@@ -38,5 +40,11 @@ public class SysUserController extends Controller {
 	public void logout() {
 		removeSessionAttr("user");
 		redirect("/");
+	}
+
+	public void list() {
+		sysUserService = new SysUserServiceImpl();
+		List<SysUser> users = sysUserService.list();
+		renderJson(users);
 	}
 }
