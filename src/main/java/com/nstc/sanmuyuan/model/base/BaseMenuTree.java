@@ -33,6 +33,14 @@ public abstract class BaseMenuTree<M extends BaseMenuTree<M>> extends Model<M> i
 		return get("menucode");
 	}
 
+	public void setMenuurl(java.lang.String menuurl) {
+		set("menuurl", menuurl);
+	}
+
+	public java.lang.String getMenuurl() {
+		return get("menuurl");
+	}
+
 	public void setTreeno(java.lang.String treeno) {
 		set("treeno", treeno);
 	}
@@ -71,6 +79,14 @@ public abstract class BaseMenuTree<M extends BaseMenuTree<M>> extends Model<M> i
 
 	public java.lang.Integer getSortno() {
 		return get("sortno");
+	}
+
+	public void setUtype(java.lang.Integer utype) {
+		set("utype", utype);
+	}
+
+	public java.lang.Integer getUtype() {
+		return get("utype");
 	}
 
 }
