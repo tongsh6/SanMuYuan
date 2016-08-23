@@ -14,6 +14,7 @@ import com.nstc.sanmuyuan.Interceptor.AuthInterceptor;
 import com.nstc.sanmuyuan.controller.MainController;
 import com.nstc.sanmuyuan.controller.MenuController;
 import com.nstc.sanmuyuan.controller.SysUserController;
+import com.nstc.sanmuyuan.controller.WeixinController;
 import com.nstc.sanmuyuan.model._MappingKit;
 
 public class WebConfig extends JFinalConfig {
@@ -29,11 +30,12 @@ public class WebConfig extends JFinalConfig {
 	public void configRoute(Routes me) {
 		me.add("/", MainController.class, "/pages");
 		me.add("/sysuser", SysUserController.class, "/pages");
-		me.add("/menulist", MenuController.class);
+		me.add("/menu", MenuController.class);
+		me.add("/weixin", WeixinController.class);
 	}
 
 	public static C3p0Plugin createC3p0Plugin() {
-		return new C3p0Plugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim());
+		return new C3p0Plugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim(),PropKit.get("driverClass").trim());
 	}
 
 	@Override
