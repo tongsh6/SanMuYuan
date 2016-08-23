@@ -1,4 +1,14 @@
-jdbcUrl = jdbc:mysql://127.0.0.1/sanmuyuan?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+jdbcUrl = jdbc:mysql://127.0.0.1/sanmuyuan?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&serverTimezone=GMT&userSSL=false
 user = root
 password = qwedc3
 devMode = true
+driverClass = com.mysql.cj.jdbc.Driver
+
+
+
+AppID = wx8d3707eabfe6ecda
+AppSecret = 6bb6af515b947e9e1468e632bd3aaf52
+weixinURL = http://proxy.weixin.vcooline.com/server/1465714115068655
+Token = 2a66961c2cd9ea5a042d
+EncodingAESKey = sdLUJxFqt9sM0OOx0jSLiUxQGJFOfEKwBjBQc5Jv2Jx
+encryptMessage = false
