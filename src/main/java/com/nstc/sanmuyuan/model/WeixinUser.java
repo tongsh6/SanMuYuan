@@ -1,5 +1,11 @@
 package com.nstc.sanmuyuan.model;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.ActiveRecordException;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.nstc.sanmuyuan.model.base.BaseWeixinUser;
 
 /**
@@ -8,4 +14,37 @@ import com.nstc.sanmuyuan.model.base.BaseWeixinUser;
 @SuppressWarnings("serial")
 public class WeixinUser extends BaseWeixinUser<WeixinUser> {
 	public static final WeixinUser dao = new WeixinUser();
+
+	public List<WeixinUser> list() {
+		return find("select id,openid,nickname, ifnull(phoneno,'')phoneno,ifnull(addressed,'')addressed,ifnull(linkname,'')linkname,ifnull(linktelno,'')linktelno,ifnull(remark,'')remark from WEIXIN_USER order by id");
+	}
+
+	public void batchSave(List<WeixinUser> userInfos) throws Exception {
+
+		try {
+			Db.tx(new IAtom() {
+
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+					for (WeixinUser weixinUser : userInfos) {
+						try {
+							weixinUser.save();
+							reslut = true;
+						} catch (Exception e) {
+							if (e.getMessage().contains("MySQLIntegrityConstraintViolationException") && e.getMessage().contains("PRIMARY")) {
+								// 依靠数据库去重复（主键openid），后期再优化处理
+								reslut = true;
+							} else {
+								throw new SQLException(e);
+							}
+						}
+					}
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
 }
