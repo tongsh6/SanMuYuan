@@ -1,4 +1,6 @@
-create database sanmuyuan;
+drop database sanmuyuan;
+
+create database sanmuyuan  DEFAULT CHARSET=utf8mb4;
 
 use sanmuyuan;
 -- ----------------------------
@@ -13,7 +15,7 @@ CREATE TABLE `SYS_USER` (
   `pwd` varchar(100) DEFAULT '123456',
   `createdate` DATETIME DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of SYS_USER
@@ -29,39 +31,42 @@ CREATE TABLE `MENU_TREE` (
   `menuid` bigint(10) NOT NULL AUTO_INCREMENT,
   `menuname` varchar(20) NOT NULL,
   `menucode` char(5) NOT NULL,
+  `menuurl` varchar(120) default NULL,
   `treeno` char(9) NOT NULL,
   `pmid` int(10) default NULL,
   `ishidden` CHAR(1) default 'S',
   `isleaf` CHAR(1) default '0',
+  `utype` int default 3,
   `sortno` int ,
   PRIMARY KEY (`menuid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of MENU_TREE
 -- ----------------------------
-INSERT INTO `MENU_TREE` VALUES ('1', '系统用户', '101', '001', NULL, 'S', '0',1);
-INSERT INTO `MENU_TREE` VALUES ('2', '微信用户', '102', '001', NULL, 'S', '0',2);
-INSERT INTO `MENU_TREE` VALUES ('3', '产品管理', '103', '001', NULL, 'S', '0',3);
-INSERT INTO `MENU_TREE` VALUES ('4', '订单管理', '104', '001', NULL, 'S', '0',4);
-INSERT INTO `MENU_TREE` VALUES ('5', '库存管理', '105', '001', NULL, 'S', '0',5);
-INSERT INTO `MENU_TREE` VALUES ('6', '综合查询', '106', '001', NULL, 'S', '0',6);
+INSERT INTO `MENU_TREE` VALUES ('1', '系统用户', '101', NULL,'001', NULL, 'S', '0',1,1);
+INSERT INTO `MENU_TREE` VALUES ('2', '微信用户', '102', NULL,'001', NULL, 'S', '0',2,2);
+INSERT INTO `MENU_TREE` VALUES ('3', '产品管理', '103', NULL,'001', NULL, 'S', '0',2,3);
+INSERT INTO `MENU_TREE` VALUES ('4', '订单管理', '104', NULL,'001', NULL, 'S', '0',2,4);
+INSERT INTO `MENU_TREE` VALUES ('5', '库存管理', '105', NULL,'001', NULL, 'S', '0',2,5);
+INSERT INTO `MENU_TREE` VALUES ('6', '综合查询', '106', NULL,'001', NULL, 'S', '0',2,6);
 
 -- ----------------------------
 -- Table structure for WEIXIN_USER
 -- ----------------------------
 DROP TABLE IF EXISTS `WEIXIN_USER`;
 CREATE TABLE `WEIXIN_USER` (
-  `openid` varchar(200) NOT NULL,
-  `nickname` varchar(200) default NULL,
-  `username` varchar(100) default NULL,
-  `phoneno` varchar(20) default NULL,
-  `addressed` varchar(100) default NULL,
-  `linkname` varchar(100) default NULL,
-  `linktelno` varchar(100) default NULL,
-  `remark` varchar(100) default NULL,
-  PRIMARY KEY (`openid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+  `openid` varchar(200) NOT null PRIMARY KEY,
+  `nickname` varchar(200) default '',
+  `username` varchar(100) default '',
+  `phoneno` varchar(20) default '',
+  `addressed` varchar(100) default '',
+  `linkname` varchar(100) default '',
+  `linktelno` varchar(100) default '',
+  `remark` varchar(100) default '',
+  `id` bigint(10) AUTO_INCREMENT NOT NULL ,
+   key(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1000001 DEFAULT CHARSET=utf8mb4;
 
 
 
@@ -73,7 +78,7 @@ CREATE TABLE `COMMODITIES` (
   `cid` bigint(20) NOT NULL AUTO_INCREMENT,
   `cname` varchar(50) NOT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of COMMODITIES
@@ -92,7 +97,7 @@ CREATE TABLE `PRODUCT` (
   `price` double(14,2) NOT NULL default 0,
   `remark` varchar(150) default null,
   PRIMARY KEY (`productid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for log
@@ -104,7 +109,7 @@ CREATE TABLE `PRODUCT_ITEM` (
   `cid` bigint(20) NOT NULL,
   `itemnumber` bigint(20) NOT NULL default 1,
   PRIMARY KEY (`itemid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for ORDERS
@@ -117,7 +122,7 @@ CREATE TABLE `ORDERS` (
   `price` double(14,2) NOT NULL default 0,
   `remark` varchar(255) default NULL,
   PRIMARY KEY (`orderid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for DISTRIBUTION_PLAN
@@ -131,7 +136,7 @@ CREATE TABLE `DISTRIBUTION_PLAN` (
   `planstate` char(1) default '2',
   `remark` varchar(255) default NULL,
   PRIMARY KEY (`planid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for PLAN_ITEM
@@ -143,7 +148,7 @@ CREATE TABLE `PLAN_ITEM` (
   `cid` bigint(20) NOT NULL,
   `itemnumber` bigint(20) NOT NULL default 1,
   PRIMARY KEY (`itemid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for TMESSAGE
@@ -156,7 +161,7 @@ CREATE TABLE `TMESSAGE` (
   `msg` text DEFAULT NULL,
   `createdate` DATETIME DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`msgid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 
 
