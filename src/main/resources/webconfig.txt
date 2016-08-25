@@ -2,7 +2,7 @@ jdbcUrl = jdbc:mysql://127.0.0.1/sanmuyuan?characterEncoding=utf8&zeroDateTimeBe
 user = root
 password = qwedc3
 devMode = true
-driverClass = com.mysql.cj.jdbc.Driver
+driverClass = com.mysql.jdbc.Driver
 
 
 
