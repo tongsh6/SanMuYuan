@@ -22,7 +22,7 @@ public abstract class BaseWeixinUser<M extends BaseWeixinUser<M>> extends Model<
 	}
 
 	public java.lang.String getNickname() {
-		return get("nickname")== null ? "" : get("nickname");
+		return get("nickname");
 	}
 
 	public void setUsername(java.lang.String username) {
@@ -30,7 +30,7 @@ public abstract class BaseWeixinUser<M extends BaseWeixinUser<M>> extends Model<
 	}
 
 	public java.lang.String getUsername() {
-		return get("username")== null ? "" : get("username");
+		return get("username");
 	}
 
 	public void setPhoneno(java.lang.String phoneno) {
@@ -38,7 +38,7 @@ public abstract class BaseWeixinUser<M extends BaseWeixinUser<M>> extends Model<
 	}
 
 	public java.lang.String getPhoneno() {
-		return get("phoneno")== null ? "" : get("phoneno");
+		return get("phoneno");
 	}
 
 	public void setAddressed(java.lang.String addressed) {
@@ -46,7 +46,7 @@ public abstract class BaseWeixinUser<M extends BaseWeixinUser<M>> extends Model<
 	}
 
 	public java.lang.String getAddressed() {
-		return get("addressed")== null ? "" : get("addressed");
+		return get("addressed");
 	}
 
 	public void setLinkname(java.lang.String linkname) {
@@ -54,7 +54,7 @@ public abstract class BaseWeixinUser<M extends BaseWeixinUser<M>> extends Model<
 	}
 
 	public java.lang.String getLinkname() {
-		return get("linkname")== null ? "" : get("linkname");
+		return get("linkname");
 	}
 
 	public void setLinktelno(java.lang.String linktelno) {
@@ -62,7 +62,7 @@ public abstract class BaseWeixinUser<M extends BaseWeixinUser<M>> extends Model<
 	}
 
 	public java.lang.String getLinktelno() {
-		return get("linktelno")== null ? "" : get("linktelno");
+		return get("linktelno");
 	}
 
 	public void setRemark(java.lang.String remark) {
@@ -70,7 +70,7 @@ public abstract class BaseWeixinUser<M extends BaseWeixinUser<M>> extends Model<
 	}
 
 	public java.lang.String getRemark() {
-		return get("remark") == null ? "" : get("remark");
+		return get("remark");
 	}
 
 	public void setId(java.lang.Long id) {
