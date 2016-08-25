@@ -1,5 +1,6 @@
 package com.nstc.sanmuyuan;
 
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -8,11 +9,14 @@ import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
-import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.plugin.druid.DruidPlugin;
+import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.render.ViewType;
 import com.nstc.sanmuyuan.Interceptor.AuthInterceptor;
+import com.nstc.sanmuyuan.controller.CommoditiesController;
 import com.nstc.sanmuyuan.controller.MainController;
 import com.nstc.sanmuyuan.controller.MenuController;
+import com.nstc.sanmuyuan.controller.ProductController;
 import com.nstc.sanmuyuan.controller.SysUserController;
 import com.nstc.sanmuyuan.controller.WeixinController;
 import com.nstc.sanmuyuan.model._MappingKit;
@@ -32,19 +36,22 @@ public class WebConfig extends JFinalConfig {
 		me.add("/sysuser", SysUserController.class, "/pages");
 		me.add("/menu", MenuController.class);
 		me.add("/weixin", WeixinController.class);
+		me.add("/product", ProductController.class);
+		me.add("/commodities", CommoditiesController.class);
 	}
 
-	public static C3p0Plugin createC3p0Plugin() {
-		return new C3p0Plugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim(),PropKit.get("driverClass").trim());
+	public static DruidPlugin createDruidPlugin() {
+		return new DruidPlugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim(), PropKit.get("driverClass").trim());
 	}
 
 	@Override
 	public void configPlugin(Plugins me) {
-		C3p0Plugin C3p0Plugin = createC3p0Plugin();
-		me.add(C3p0Plugin);
+		DruidPlugin druidPlugin = createDruidPlugin();
+		druidPlugin.addFilter(new StatFilter());
+		me.add(druidPlugin);
 
 		// 配置ActiveRecord插件
-		ActiveRecordPlugin arp = new ActiveRecordPlugin(C3p0Plugin);
+		ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
 		me.add(arp);
 		// 所有配置在 MappingKit 中搞定
 		_MappingKit.mapping(arp);
@@ -58,8 +65,8 @@ public class WebConfig extends JFinalConfig {
 
 	@Override
 	public void configHandler(Handlers me) {
-		// TODO Auto-generated method stub
-
+		DruidStatViewHandler dvh = new DruidStatViewHandler("/druid");
+		me.add(dvh);
 	}
 
 }
