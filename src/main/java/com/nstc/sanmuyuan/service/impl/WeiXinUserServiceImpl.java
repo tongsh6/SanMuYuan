@@ -1,8 +1,6 @@
 package com.nstc.sanmuyuan.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
@@ -165,43 +163,44 @@ public class WeiXinUserServiceImpl implements WeiXinUserService {
 
 	private List<WeixinUser> parseJsonToUserInfo(String jsonResult) {
 		List<WeixinUser> list = new ArrayList<WeixinUser>();
-		SimpleDateFormat sfg = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+		// SimpleDateFormat sfg = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 		JSONObject jo = JSONObject.parseObject(jsonResult);
 
 		JSONArray user_list = jo.getJSONArray("user_info_list");
 
 		for (int i = 0; i < user_list.size(); i++) {
 			JSONObject userObject = user_list.getJSONObject(i);
-			String city = userObject.getString("city");
-			String country = userObject.getString("country");
-			String groupid = userObject.getString("groupid");
-			String headimgurl = userObject.getString("headimgurl");
-			String language = userObject.getString("language");
+			// String city = userObject.getString("city");
+			// String country = userObject.getString("country");
+			// String groupid = userObject.getString("groupid");
+			// String headimgurl = userObject.getString("headimgurl");
+			// String language = userObject.getString("language");
 			String nickname = userObject.getString("nickname");
 			String openid = userObject.getString("openid");
-			String province = userObject.getString("province");
+			// String province = userObject.getString("province");
 			String remark = userObject.getString("remark");
-			String sex = userObject.getString("sex");
-			// 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
-
-			if (sex != null && !sex.equals("")) {
-				int sexInt = Integer.parseInt(sex);
-				if (sexInt == 1) {
-					sex = "男";
-				} else if (sexInt == 2) {
-					sex = "女";
-				} else {
-					sex = "未知";
-				}
-			} else {
-				sex = "未知";
-			}
-			String subscribe = userObject.getString("subscribe");
-			String subscribe_time = userObject.getString("subscribe_time");
-
-			if (subscribe_time != null && !subscribe_time.equals("")) {
-				subscribe_time = sfg.format(new Date(Long.parseLong(subscribe_time) * 1000L));
-			}
+			// String sex = userObject.getString("sex");
+			// // 用户的性别，值为1时是男性，值为2时是女性，值为0时是未知
+			//
+			// if (sex != null && !sex.equals("")) {
+			// int sexInt = Integer.parseInt(sex);
+			// if (sexInt == 1) {
+			// sex = "男";
+			// } else if (sexInt == 2) {
+			// sex = "女";
+			// } else {
+			// sex = "未知";
+			// }
+			// } else {
+			// sex = "未知";
+			// }
+			// String subscribe = userObject.getString("subscribe");
+			// String subscribe_time = userObject.getString("subscribe_time");
+			//
+			// if (subscribe_time != null && !subscribe_time.equals("")) {
+			// subscribe_time = sfg.format(new
+			// Date(Long.parseLong(subscribe_time) * 1000L));
+			// }
 			WeixinUser weixinUser = new WeixinUser();
 			weixinUser.setOpenid(openid);
 			weixinUser.setNickname(nickname);
