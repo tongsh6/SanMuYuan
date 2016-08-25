@@ -73,20 +73,20 @@ public abstract class BaseMenuTree<M extends BaseMenuTree<M>> extends Model<M> i
 		return get("isleaf");
 	}
 
-	public void setSortno(java.lang.Integer sortno) {
-		set("sortno", sortno);
-	}
-
-	public java.lang.Integer getSortno() {
-		return get("sortno");
-	}
-
 	public void setUtype(java.lang.Integer utype) {
 		set("utype", utype);
 	}
 
 	public java.lang.Integer getUtype() {
 		return get("utype");
+	}
+
+	public void setSortno(java.lang.Integer sortno) {
+		set("sortno", sortno);
+	}
+
+	public java.lang.Integer getSortno() {
+		return get("sortno");
 	}
 
 }
