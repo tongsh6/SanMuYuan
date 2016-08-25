@@ -9,8 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="stylesheet" type="text/css"
-	href="lib/bootstrap/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.css">
 <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
 <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
 
@@ -83,9 +82,9 @@ th {
 .shade-edit {
 	position: absolute;
 	z-index: 1003;
-	width: 30%;
+	width: 25%;
 	height: 45%;
-	text-align: center;
+/* 	text-align: left; */
 	background-color: #DBE5F1;
 	display: table;
 }
@@ -107,16 +106,7 @@ th {
     <![endif]-->
 
 	<!-- Le fav and touch icons -->
-	<link rel="shortcut icon" href="../assets/ico/favicon.ico">
-	<link rel="apple-touch-icon-precomposed" sizes="144x144"
-		href="../assets/ico/apple-touch-icon-144-precomposed.png">
-	<link rel="apple-touch-icon-precomposed" sizes="114x114"
-		href="../assets/ico/apple-touch-icon-114-precomposed.png">
-	<link rel="apple-touch-icon-precomposed" sizes="72x72"
-		href="../assets/ico/apple-touch-icon-72-precomposed.png">
-	<link rel="apple-touch-icon-precomposed"
-		href="../assets/ico/apple-touch-icon-57-precomposed.png">
-
+	<link rel="shortcut icon" href="assets/ico/favicon.ico">
 
 		<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
 		<!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
@@ -127,7 +117,7 @@ th {
 		<!--<![endif]-->
 		
 	<div id="mask" class="mask"></div>
-	<div class="navbar navbar-default" role="navigation">
+	<div class="navbar navbar-default" role="navigation" >
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target=".navbar-collapse">
@@ -150,10 +140,9 @@ th {
 						<li><a href="sysuser/logout">注销</a></li>
 					</ul></li>
 			</ul>
-
 		</div>
+		
 	</div>
-
 	<div class="sidebar-nav">
 		<ul id="menutreeul" style="text-align: center;">
 		</ul>
@@ -169,6 +158,7 @@ th {
 				</div>
 			</div>
 		</div>
+		<a href="#" style="float: right; line-height: 1.25em; display: inline-block; padding: .75em 0em;"><i class="fa fa-arrow-circle-up"></i>回到顶部</a>
 	</div>
 	<div id="shade" class="shade">
 		<div class="Table-Cell">
@@ -185,11 +175,12 @@ th {
 	<div id="editdiv" class="shade-edit">
 		<div class="Table-Cell">
 			<div id="editinfo" class="Center-Block">
-
-
 			</div>
 		</div>
 	</div>
+	<DIV id="cfm">
+	
+	</DIV>
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
 	<script src="js/selectmenu.js"></script>
 	<script type="text/javascript">
@@ -220,7 +211,7 @@ th {
 					if (result != null && result.length > 0) {
 						var lihtml = "";
 						for (i = 0; i < result.length; i++) {
-							lihtml += "<li><a href='javascript:void(0);' onclick='selectMenu(" + result[i].menucode + ")' class='nav-header'>" + result[i].menuname + "</a></li>"
+							lihtml += "<li><a href='javascript:void(0);' onclick='selectMenu(" + result[i].menucode + ")' id='menu_"+result[i].menucode+"' class='nav-header'>" + result[i].menuname + "</a></li>"
 						}
 						$("#menutreeul").html(lihtml);
 
