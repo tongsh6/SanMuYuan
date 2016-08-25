@@ -1,5 +1,11 @@
 package com.nstc.sanmuyuan.model;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.ActiveRecordException;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.nstc.sanmuyuan.model.base.BaseProduct;
 
 /**
@@ -8,4 +14,107 @@ import com.nstc.sanmuyuan.model.base.BaseProduct;
 @SuppressWarnings("serial")
 public class Product extends BaseProduct<Product> {
 	public static final Product dao = new Product();
+
+	public List<Product> list() {
+		StringBuffer subquery = new StringBuffer("select");
+		subquery.append(" pi.productid,");
+		subquery.append("	group_concat(");
+		subquery.append("		( c.cname ||' '||pi.itemnumber) ORDER BY pi.cid separator '  '");
+		subquery.append("	) as detail");
+		subquery.append(" from");
+		subquery.append("	PRODUCT_ITEM pi left join COMMODITIES c on c.cid = pi.cid");
+		subquery.append(" group by  pi.productid");
+		return find("select p.productid,p.productname,p.cycle,FORMAT(p.price,2)price,t.detail details,ifnull(p.remark,'')remark from PRODUCT p left join (" + subquery + ")t on t.productid=p.productid order by p.productid");
+	}
+
+	public Product info(String strProductid) {
+		Product product = findById(strProductid);
+
+		StringBuffer sql = new StringBuffer("select pi.itemid,pi.productid,pi.itemnumber,pi.cid,c.cname ");
+		sql.append(" from PRODUCT_ITEM pi left join COMMODITIES c on c.cid = pi.cid");
+		sql.append(" where pi.productid = ?");
+		sql.append(" ORDER BY pi.cid ");
+
+		List<ProductItem> items = ProductItem.dao.find(sql.toString(), product.getProductid());
+		product.put("items", items);
+		return product;
+
+	}
+
+	public void save(Product product, List<ProductItem> items) throws Exception {
+		try {
+			Db.tx(new IAtom() {
+
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+					product.setRemark(product.getRemark() == null ? "" : product.getRemark());
+					reslut = product.save();
+					if (reslut) {
+						Long productid = product.getProductid();
+						for (ProductItem productItem : items) {
+							productItem.setProductid(productid);
+							reslut = productItem.save();
+							if (!reslut) {
+								break;
+							}
+						}
+					}
+
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
+
+	public void update(Product product, List<ProductItem> items) throws Exception {
+		try {
+			Db.tx(new IAtom() {
+
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+
+					reslut = product.update();
+					if (reslut) {
+						for (ProductItem productItem : items) {
+							reslut = productItem.update();
+							if (!reslut) {
+								break;
+							}
+						}
+					}
+
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
+
+	public void del(String strProductid) throws Exception {
+		try {
+			Db.tx(new IAtom() {
+
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+
+					reslut = deleteById(strProductid);
+					if (reslut) {
+						int ret = Db.update("delete from PRODUCT_ITEM where productid = ?", strProductid);
+						if (ret <= 0) {
+							reslut = false;
+						}
+					}
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
 }

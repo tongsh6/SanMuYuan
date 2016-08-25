@@ -1,5 +1,7 @@
 package com.nstc.sanmuyuan.model;
 
+import java.util.List;
+
 import com.nstc.sanmuyuan.model.base.BaseCommodities;
 
 /**
@@ -8,4 +10,8 @@ import com.nstc.sanmuyuan.model.base.BaseCommodities;
 @SuppressWarnings("serial")
 public class Commodities extends BaseCommodities<Commodities> {
 	public static final Commodities dao = new Commodities();
+
+	public List<Commodities> list() {
+		return find("select cid,cname from COMMODITIES");
+	}
 }

@@ -8,4 +8,12 @@ import com.nstc.sanmuyuan.model.base.BaseProductItem;
 @SuppressWarnings("serial")
 public class ProductItem extends BaseProductItem<ProductItem> {
 	public static final ProductItem dao = new ProductItem();
+
+	public void setCname(java.lang.String cname) {
+		set("cname", cname);
+	}
+
+	public java.lang.String getCname() {
+		return get("cname");
+	}
 }
