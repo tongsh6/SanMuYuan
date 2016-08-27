@@ -122,7 +122,7 @@ CREATE TABLE `ORDERS` (
   `price` double(14,2) NOT NULL default 0,
   `remark` varchar(255) default NULL,
   PRIMARY KEY (`orderid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1000000001 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for DISTRIBUTION_PLAN

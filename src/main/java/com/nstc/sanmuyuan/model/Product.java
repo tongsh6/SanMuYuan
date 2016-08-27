@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.Page;
 import com.nstc.sanmuyuan.model.base.BaseProduct;
 
 /**
@@ -116,5 +117,22 @@ public class Product extends BaseProduct<Product> {
 		} catch (ActiveRecordException e) {
 			throw new Exception(e);
 		}
+	}
+
+	public Page<Product> paginate(int pageNumber, int pageSize) {
+		String select = "select p.productid,p.productname,p.cycle,FORMAT(p.price,2)price,t.detail details,ifnull(p.remark,'')remark";
+
+		StringBuffer subquery = new StringBuffer("select");
+		subquery.append(" pi.productid,");
+		subquery.append("	group_concat(");
+		subquery.append("		( c.cname ||' '||pi.itemnumber) ORDER BY pi.cid separator '  '");
+		subquery.append("	) as detail");
+		subquery.append(" from");
+		subquery.append("	PRODUCT_ITEM pi left join COMMODITIES c on c.cid = pi.cid");
+		subquery.append(" group by  pi.productid");
+
+		String sqlExceptSelect = "from PRODUCT p left join (" + subquery + ")t on t.productid=p.productid order by p.productid";
+
+		return paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}
 }

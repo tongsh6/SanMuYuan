@@ -1,0 +1,79 @@
+#FloatConfirm {
+	position: absolute;
+	display: none -webkit-box-shadow:3px 3px 3px #ccc;
+	box-shadow: 3px 3px 3px #ccc;
+	padding: 10px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+}
+
+.bg {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+	background: #EFEFEF;
+}
+
+.boxBody {
+	background: #DBE5F1;
+	position: relative;
+	border: 1px solid #fafafa;
+	height: 100%;
+	color: #000000;
+}
+
+.closeBtn {
+	float: right;
+	display: inline-block;
+	width: 26px;
+	height: 26px;
+	background: #DBE5F1;
+	color: #DBE5F1;
+	line-height: 16px;
+	text-align: center;
+	z-index: 10;
+}
+
+.title {
+	margin-bottom: 15px;
+}
+
+.text {
+	padding-left: 25px;
+	line-height: 30px;
+	color: #ff0000;
+}
+
+.iconType {
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+	background: #DBE5F1;
+	float: left;
+}
+
+.iconType:before {
+	content: '!';
+	margin-left: 8px;
+	line-height: 30px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #DBE5F1;
+}
+
+#box {
+	width: 500px;
+}
+
+#box input {
+	display: inline-block;
+	padding: 15px;
+	color: #DBE5F1;
+	font-weight: bold;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	background: #DBE5F1;
+	margin-right: 20px;
+}

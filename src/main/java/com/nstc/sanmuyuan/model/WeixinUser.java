@@ -6,6 +6,7 @@ import java.util.List;
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.Page;
 import com.nstc.sanmuyuan.model.base.BaseWeixinUser;
 
 /**
@@ -46,5 +47,9 @@ public class WeixinUser extends BaseWeixinUser<WeixinUser> {
 		} catch (ActiveRecordException e) {
 			throw new Exception(e);
 		}
+	}
+
+	public Page<WeixinUser> paginate(int pageNumber, int pageSize) {
+		return paginate(pageNumber, pageSize, "select id,openid,nickname, ifnull(phoneno,'')phoneno,ifnull(addressed,'')addressed", "from WEIXIN_USER order by id asc");
 	}
 }

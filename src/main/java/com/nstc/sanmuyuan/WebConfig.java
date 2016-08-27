@@ -16,6 +16,7 @@ import com.nstc.sanmuyuan.Interceptor.AuthInterceptor;
 import com.nstc.sanmuyuan.controller.CommoditiesController;
 import com.nstc.sanmuyuan.controller.MainController;
 import com.nstc.sanmuyuan.controller.MenuController;
+import com.nstc.sanmuyuan.controller.OrdersController;
 import com.nstc.sanmuyuan.controller.ProductController;
 import com.nstc.sanmuyuan.controller.SysUserController;
 import com.nstc.sanmuyuan.controller.WeixinController;
@@ -38,6 +39,7 @@ public class WebConfig extends JFinalConfig {
 		me.add("/weixin", WeixinController.class);
 		me.add("/product", ProductController.class);
 		me.add("/commodities", CommoditiesController.class);
+		me.add("/orders", OrdersController.class);
 	}
 
 	public static DruidPlugin createDruidPlugin() {

@@ -9,6 +9,7 @@ import com.jfinal.log.Log;
 import com.nstc.sanmuyuan.message.ResultMessage;
 import com.nstc.sanmuyuan.model.Product;
 import com.nstc.sanmuyuan.model.ProductItem;
+import com.nstc.sanmuyuan.model.WeixinUser;
 import com.nstc.sanmuyuan.service.ProductService;
 import com.nstc.sanmuyuan.service.impl.ProductServiceImpl;
 import com.nstc.sanmuyuan.validator.ProductValidator;
@@ -111,4 +112,7 @@ public class ProductController extends Controller {
 		}
 	}
 
+	public void page() {
+		renderJson("productpage", Product.dao.paginate(getParaToInt(0, 1), 6));
+	}
 }

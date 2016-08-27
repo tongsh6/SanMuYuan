@@ -3,33 +3,38 @@
  */
 var _menucode = "";
 function selectMenu(menucode) {
+	showCapion();
 	_menucode = menucode;
 	var strHtml = "";
 	if (menucode == "101") {
-		jsonAjax("get", "sysuser/list", showSysUserPage);
+		jsonAjax("get", "sysuser/list", showSysUserListPage);
 	} else if (menucode == "102") {
-		jsonAjax("get", "weixin/list", showWeixinUserPage);
+		jsonAjax("get", "weixin/list", showWeixinUserListPage);
 	} else if (menucode == "103") {
 		jsonAjax("get", "product/list", showProductListPage);
 	} else if (menucode == "104") {
-
+		jsonAjax("get", "orders/list", showOrdersListPage);
 	} else if (menucode == "105") {
-
+		hideCapion();
+		showCapionMsg("暂未完成，敬请期待！");
 	} else if (menucode == "106") {
-
+		hideCapion();
+		showCapionMsg("暂未完成，敬请期待！");
 	} else if (menucode == "107") {
-
+		hideCapion();
+		showCapionMsg("暂未完成，敬请期待！");
 	} else {
 		strHtml = "<h>操作错误！</h>";
+		hideCapion();
 	}
 }
 
-function showSysUserPage(data) {
+function showSysUserListPage(data) {
 	var str = "<div class='panel-heading no-collapse'style='height:50px;'><h5>系统用户</h5></div>";
-	str += "<table class='table table-bordered table-striped'>";
+	str += "<table class='table table-condensed  table-bordered table-striped'>";
 	str += "<thead>";
 	str += "<tr>";
-	str += "<th>编码</th>";
+	str += "<th>编号</th>";
 	str += "<th>登录码</th>";
 	str += "<th>用户名</th>";
 	str += "</tr>";
@@ -50,6 +55,7 @@ function showSysUserPage(data) {
 
 	str += "</table>";
 	$("#mainpanel").html(str);
+	hideCapion();
 }
 
 /*
@@ -58,15 +64,15 @@ function showSysUserPage(data) {
 /**
  * 微信用户列表回调函数
  */
-function showWeixinUserPage(data) {
+function showWeixinUserListPage(data) {
 	var str = "<div class='panel-heading no-collapse' style='height:50px;'>" + "<div style='float:left;'><h5>微信用户</h5></div>";
 	str += "<div style='float:right;'><button id='syncwebxinuserbtn' class='btn btn-danger'><i class='fa fa-gears'></i>&nbsp;同步微信用户</button></div>";
 	str += "</div>";
 
-	str += "<table class='table table-bordered table-striped'>";
+	str += "<table class='table table-condensed table-bordered table-striped'>";
 	str += "<thead>";
 	str += "<tr>";
-	str += "<th>用户编码</th>";
+	str += "<th>用户编号</th>";
 	str += "<th>微信昵称</th>";
 	str += "<th>手机号码</th>";
 	str += "<th>地址</th>";
@@ -99,6 +105,7 @@ function showWeixinUserPage(data) {
 	$("#mainpanel").html(str);
 
 	$("#syncwebxinuserbtn").click(syncWebxinUser);
+	hideCapion();
 }
 
 /**
@@ -119,7 +126,7 @@ function syncWebxinUserCallBack(data) {
 	if (data != null) {
 		{
 			showCapionMsg(data.resultMsg);
-			jsonAjax("get", "weixin/list", showWeixinUserPage);
+			jsonAjax("get", "weixin/list", showWeixinUserListPage);
 		}
 	}
 }
@@ -139,7 +146,7 @@ function editWeixinUserCallBack(data) {
 		strHtml += '<form id="editform">';
 		strHtml += '<input type="hidden" name="weixinUser.openid" value="' + data.openid + '">';
 		strHtml += '<div class="form-group">';
-		strHtml += '<label>用户编码</label> <input type="text" name="weixinUser.id" value="' + data.id + '" disabled="disabled" class="form-control">';
+		strHtml += '<label>用户编号</label> <input type="text" name="weixinUser.id" value="' + data.id + '" disabled="disabled" class="form-control">';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
 		strHtml += '<label>微信昵称</label> <input type="text" name="weixinUser.nickname" value="' + data.nickname + '" disabled="disabled" class="form-control">';
@@ -198,7 +205,7 @@ function weixinUserSaveCallBack(data) {
 		{
 			showCapionMsg(data.resultMsg);
 			weixinUserCancel();
-			jsonAjax("get", "weixin/list", showWeixinUserPage);
+			jsonAjax("get", "weixin/list", showWeixinUserListPage);
 		}
 	}
 }
@@ -223,10 +230,10 @@ function showProductListPage(data) {
 	var str = "<div class='panel-heading no-collapse' style='height:50px;'>" + "<div style='float:left;'><h5>产品管理</h5></div>";
 	str += "<div style='float:right;'><button id='addproductpagebtn' class='btn btn-danger'><i class='fa fa-plus'></i>&nbsp;新增</button></div>";
 	str += "</div>";
-	str += "<table class='table table-bordered table-striped'>";
+	str += "<table class='table table-condensed table-bordered table-striped'>";
 	str += "<thead>";
 	str += "<tr>";
-	str += "<th>产品编码</th>";
+	str += "<th>产品编号</th>";
 	str += "<th>产品名称</th>";
 	str += "<th>配送周期</th>";
 	str += "<th>价格</th>";
@@ -257,6 +264,7 @@ function showProductListPage(data) {
 	str += "</table>";
 	$("#mainpanel").html(str);
 	$("#addproductpagebtn").click(addProductPage);
+	hideCapion();
 }
 
 function addProductPage() {
@@ -283,7 +291,7 @@ function addProductCallBack(data) {
 	strHtml += '</select>';
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
-	strHtml += '<label>价格</label> <input type="text" name="product.price" value="" class="form-control">';
+	strHtml += '<label>价格</label> <input type="number" name="product.price" value="" class="form-control" >';
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
 	strHtml += '<div>';
@@ -358,7 +366,7 @@ function editProductCallBack(data) {
 		strHtml += '<div class="tab-pane active in" id="home">';
 		strHtml += '<form id="editform">';
 		strHtml += '<div class="form-group">';
-		strHtml += '<label>产品编码</label> <input type="text" name="product.productid" value="' + data.productid + '" class="form-control" readonly >';
+		strHtml += '<label>产品编号</label> <input type="text" name="product.productid" value="' + data.productid + '" class="form-control" readonly >';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
 		strHtml += '<label>产品名称</label> <input type="text" name="product.productname" value="' + data.productname + '" class="form-control">';
@@ -371,7 +379,7 @@ function editProductCallBack(data) {
 		strHtml += '</select>';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
-		strHtml += '<label>价格</label> <input type="text" name="product.price" value="' + data.price + '" class="form-control">';
+		strHtml += '<label>价格</label> <input type="number" name="product.price" value="' + data.price + '" class="form-control" />';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
 		strHtml += '<div>';
@@ -451,10 +459,323 @@ function productOperCallBack(data) {
 /*
  * Product end
  */
+/*
+ * Orders beg
+ */
+function showOrdersListPage(data) {
+	var str = "<div class='panel-heading no-collapse' style='height:50px;'>" + "<div style='float:left;'><h5>订单管理</h5></div>";
+	str += "<div style='float:right;'><button id='addorderpagebtn' class='btn btn-danger'><i class='fa fa-plus'></i>&nbsp;新增</button></div>";
+	str += "</div>";
+	str += "<table id='ordertable' class='table table-responsive table-condensed table-bordered table-striped'>";
+	str += "<thead>";
+	str += "<tr>";
+	str += "<th>订单编号</th>";
+	str += "<th>客户编号</th>";
+	str += "<th>产品编号</th>";
+	str += "<th>实际价格</th>";
+	str += "<th>备注</th>";
+	str += "<th>操作</th>";
+	str += "</tr>";
+	str += "</thead>";
+
+	str += "<tbody>";
+
+	if (data != null && data.length > 0) {
+		for (i = 0; i < data.length; i++) {
+			str += "<tr>";
+			str += "<td>" + data[i].orderid + "</td>";
+			str += "<td>" + data[i].id + "</td>";
+			str += "<td>" + data[i].productid + "</td>";
+			str += "<td align='right'>" + data[i].price + "</td>";
+			str += "<td>" + data[i].remark + "</td>";
+			str += "<td align='center'><a href='javascript:void(0);' onclick=editOrder(this.parentNode.parentNode)><i class='fa fa-pencil'></i></a>&nbsp;&nbsp;";
+			str += "<a role='button' data-toggle='modal' href='javascript:void(0);' onclick=delOrder('" + data[i].orderid + "')><i class='fa fa-trash-o'></i></a></td>";
+			str += "</tr>";
+		}
+	}
+	str += "</tbody>";
+
+	str += "</table>";
+	$("#mainpanel").html(str);
+	$("#addorderpagebtn").click(addOrdersPage);
+	hideCapion();
+}
+var addCountNum = 0;
+function addOrdersPage() {
+	if (addCountNum > 0) {
+		alert("请先保存！");
+		return;
+	}
+	var str = "";
+	str += "<tr>";
+	str += "<td>" + '<input type="text" id="orderid" value="' + "" + '" class="form-control" readonly> ' + "</td>";
+	str += "<td><input type='hidden' id='openid'/>" + '<input type="text" id="weixinuserid" value="' + "" + '" class="form-control" readonly onclick="showWeixinUserList();"> ' + "</td>";
+	str += "<td><input type='hidden' id='productid'/>" + '<input type="text" id="productview" value="" class="form-control" readonly onclick="showProductList();" >' + "</td>";
+	str += "<td>" + '<input type="number" id="price" value="' + "" + '" class="form-control" style="text-align:right;"> ' + "</td>";
+	str += "<td>" + '<input type="text" id="remark" value="' + "" + '" class="form-control"/> ' + "</td>";
+	str += "<td align='center'><button id='saveorderpagebtn' class='btn btn-danger'><i class='fa fa-save'></i></button></td>";
+	str += "</tr>";
+
+	addTr("ordertable", 0, str);
+	$("#saveorderpagebtn").click(function() {
+		operOrder("save");
+	});
+	addCountNum++;
+}
+
+function editOrder(tr) {
+	if (addCountNum > 0) {
+		alert("请先保存！");
+		return;
+	}
+	var orderid = tr.cells[0].textContent;
+	if (orderid == "") {
+		showCapionMsg("未知错误！");
+	} else {
+		jsonAjax("get", "orders/info?orderid=" + orderid, function(data) {
+			tr.cells[0].innerHTML = '<input type="text" id="orderid" value="' + orderid + '" class="form-control" readonly>';
+			tr.cells[1].innerHTML = '<input type="hidden" id="openid" value="' + data.openid + '"/><input type="text" id="weixinuserid" value="' + data.id + '(' + data.nickname + ')' + '" class="form-control" readonly onclick="showWeixinUserList();"> ';
+			tr.cells[2].innerHTML = '<input type="hidden" id="productid" value="' + data.productid + '"/><input type="text" id="productview" value="' + data.productid + '(' + data.productname + ')' + '" class="form-control" readonly onclick="showProductList();" >';
+			tr.cells[3].innerHTML = '<input type="number" id="price" value="' + data.price + '" class="form-control" style="text-align:right;"> ';
+			tr.cells[4].innerHTML = '<input type="text" id="remark" value="' + data.remark + '" class="form-control"/> ';
+			tr.cells[5].innerHTML = '<button id="saveorderpagebtn" class="btn btn-danger"><i class="fa fa-save"></i></button>';
+			tr.cells[5].align = "center";
+			$("#saveorderpagebtn").click(function() {
+				operOrder("update");
+			});
+		})
+	}
+	addCountNum++;
+}
+
+function operOrder(oper) {
+	var msg = "";
+	if ($.trim($("#openid").val()) == "") {
+		msg += "<li>请点击输入框选择客户编号！</li>";
+	}
+	if ($.trim($("#productid").val()) == "") {
+		msg += "<li>请点击输入框请选择套餐编号！</li>";
+	}
+	if ($.trim($("#price").val()) == "") {
+		msg += "<li>请输入实际价格！</li>";
+	}
+	if (msg != null && msg.length > 0) {
+		$.FloatConfirm({
+			title : '提示',
+			type : 'error',
+			text : msg
+		})
+
+		return;
+	} else {
+		var params = "orders.orderid=" + $.trim($("#orderid").val()) + "&";
+		params += "orders.openid=" + $.trim($("#openid").val()) + "&";
+		params += "orders.productid=" + $.trim($("#productid").val()) + "&";
+		params += "orders.price=" + $.trim($("#price").val()) + "&";
+		params += "orders.remark=" + $.trim($("#remark").val());
+
+		showCapion();
+		jsonAjax("post", "orders/" + oper + "?" + params, function(data) {
+			hideCapion();
+			if (data != null) {
+				showCapionMsg(data.resultMsg);
+				jsonAjax("get", "orders/list", showOrdersListPage);
+			} else {
+				showCapionMsg("未知错误！");
+			}
+		});
+	}
+}
+
+function delOrder(orderid) {
+	showCfm("您确定要删除吗,此操作将会同时把配货计划一起删除？", function() {
+		$("#delcalbtn").click();
+		showCapion();
+		jsonAjax("post", "orders/del?orderid=" + orderid, function(data) {
+			hideCapion();
+			if (data != null) {
+				showCapionMsg(data.resultMsg);
+				jsonAjax("get", "orders/list", showOrdersListPage);
+			} else {
+				showCapionMsg("未知错误！");
+			}
+		});
+	});
+}
+
+/*
+ * Orders end
+ */
+
+function showWeixinUserList(pagenum) {
+	if (typeof (pagenum) == "undefined") {
+		pagenum = "";
+	}
+
+	closeListPage();
+	showCapion();
+	jsonAjax("get", "weixin/page/" + pagenum, function(data) {
+		hideCapion();
+		if (data != null) {
+			var strHtml = "";
+			strHtml += '<div>';
+			strHtml += '<button id="closelistbtn" type="button" class="close" aria-hidden="true">&times;</button>';
+			strHtml += '</div>';
+			strHtml += '<table class="table">';
+			strHtml += '<thead>';
+			strHtml += '<tr>';
+			strHtml += '<th>用户编号</th>';
+			strHtml += '<th>微信昵称</th>';
+			strHtml += '<th>地址</th>';
+			strHtml += '</tr>';
+			strHtml += '</thead>';
+			strHtml += '<tbody>';
+			if (data.weixinuserpage.list != null && data.weixinuserpage.list.length > 0) {
+				var users = data.weixinuserpage.list;
+
+				var pNum = (parseInt(data.weixinuserpage.pageNumber) - 1);
+				pNum = pNum < 1 ? 1 : pNum;
+				var nNum = (parseInt(data.weixinuserpage.pageNumber) + 1);
+				nNum = nNum > data.weixinuserpage.totalPage ? data.weixinuserpage.totalPage : nNum;
+
+				var strDisabledP = "";
+				if (pNum > 1) {
+					strDisabledP = 'onclick=showWeixinUserList("' + pNum + '")';
+				}
+				var strDisabledN = "";
+				if (nNum <= data.weixinuserpage.totalPage) {
+					strDisabledN = ' onclick=showWeixinUserList("' + nNum + '")';
+				}
+
+				for (i = 0; i < users.length; i++) {
+					strHtml += '<tr ondblclick="dbclickWeixinUserCallBack(this);">';
+					strHtml += '<td><span id="weixinuserid">' + users[i].id + '</span><input type="hidden" id="openid" value="' + users[i].openid + '" /></td>';
+					strHtml += '<td>' + users[i].nickname + '</td>';
+					strHtml += '<td>' + users[i].addressed + '</td>';
+					strHtml += '</tr>';
+				}
+				strHtml += '</tbody>';
+				strHtml += '</table>';
+				strHtml += '<ul class="pager"> ';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledP + '>&larr; 上一页</a></li>';
+				strHtml += '<span>' + data.weixinuserpage.pageNumber + '/' + data.weixinuserpage.totalPage + '&nbsp;&nbsp;总条数：' + data.weixinuserpage.totalRow + ' </span>';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledN + ' >下一页  &rarr;</a></li>';
+				strHtml += '</ul>';
+			}
+			$("#listinfo").html(strHtml);
+			$("#closelistbtn").click(closeListPage);
+			showCapionByDivId("#listdiv");
+		} else {
+			showCapionMsg("未知错误！");
+		}
+	});
+}
+function showProductList(pagenum) {
+	if (typeof (pagenum) == "undefined") {
+		pagenum = "";
+	}
+
+	closeListPage();
+	showCapion();
+	jsonAjax("get", "product/page/" + pagenum, function(data) {
+		hideCapion();
+		if (data != null) {
+			var strHtml = "";
+			strHtml += '<div>';
+			strHtml += '<button id="closelistbtn" type="button" class="close" aria-hidden="true">&times;</button>';
+			strHtml += '</div>';
+			strHtml += '<table class="table">';
+			strHtml += '<thead>';
+			strHtml += '<tr>';
+			strHtml += '<th>产品编号</th>';
+			strHtml += '<th>产品名称</th>';
+			strHtml += '<th>配送周期</th>';
+			strHtml += '<th>价格</th>';
+			strHtml += '<th>内容</th>';
+			strHtml += '</tr>';
+			strHtml += '</thead>';
+			strHtml += '<tbody>';
+			if (data.productpage.list != null && data.productpage.list.length > 0) {
+				var products = data.productpage.list;
+
+				var pNum = (parseInt(data.productpage.pageNumber) - 1);
+				pNum = pNum < 1 ? 1 : pNum;
+				var nNum = (parseInt(data.productpage.pageNumber) + 1);
+				nNum = nNum > data.productpage.totalPage ? data.productpage.totalPage : nNum;
+
+				var strDisabledP = "";
+				if (pNum > 1) {
+					strDisabledP = 'onclick=showProductList("' + pNum + '")';
+				}
+				var strDisabledN = "";
+				if (nNum != 1 && nNum <= data.productpage.totalPage) {
+					strDisabledN = ' onclick=showProductList("' + nNum + '")';
+				}
+
+				for (i = 0; i < products.length; i++) {
+					strHtml += '<tr ondblclick="dbclickProductCallBack(this);">';
+					strHtml += '<td>' + products[i].productid + '</td>';
+					strHtml += '<td>' + products[i].productname + '</td>';
+					strHtml += '<td>' + products[i].cycle + '</td>';
+					strHtml += '<td align="right">' + products[i].price + '</td>';
+					strHtml += '<td>' + products[i].details + '</td>';
+					strHtml += '</tr>';
+				}
+				strHtml += '</tbody>';
+				strHtml += '</table>';
+				strHtml += '<ul class="pager"> ';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledP + '>&larr; 上一页</a></li>&nbsp;';
+				strHtml += '<span>' + data.productpage.pageNumber + '/' + data.productpage.totalPage + '&nbsp;&nbsp;总条数：' + data.productpage.totalRow + ' </span>';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledN + ' >下一页  &rarr;</a></li>';
+				strHtml += '</ul>';
+			}
+			$("#listinfo").html(strHtml);
+			$("#closelistbtn").click(closeListPage);
+			showCapionByDivId("#listdiv");
+		} else {
+			showCapionMsg("未知错误！");
+		}
+	});
+}
+
+function dbclickWeixinUserCallBack(tr) {
+	$("#openid").val(tr.cells[0].lastChild.value);
+	$("#weixinuserid").val(tr.cells[0].firstChild.textContent + "(" + tr.cells[1].textContent + ")");
+	closeListPage();
+}
+
+function dbclickProductCallBack(tr) {
+	$("#productid").val(tr.cells[0].textContent);
+	$("#productview").val(tr.cells[0].textContent + "(" + tr.cells[1].textContent + ")");
+	$("#price").val(tr.cells[3]);
+	closeListPage();
+}
 
 /**
  * utils
  */
+/**
+ * 为table指定行添加一行
+ * 
+ * tab 表id row 行数，如：0->第一行 1->第二行 -2->倒数第二行 -1->最后一行 trHtml 添加行的html代码
+ * 
+ */
+function addTr(tab, row, trHtml) {
+	// 获取table最后一行 $("#tab tr:last")
+	// 获取table第一行 $("#tab tr").eq(0)
+	// 获取table倒数第二行 $("#tab tr").eq(-2)
+	var $tr = $("#" + tab + " tr").eq(row);
+	if ($tr.size() == 0) {
+		alert("指定的table id或行数不存在！");
+		return;
+	}
+	$tr.after(trHtml);
+}
+
+function closeListPage() {
+	$("#listinfo").html("");
+	hideCapionByDivId("#listdiv");
+}
 
 function showCfm(msg, callbackfun) {
 	var strHtml = '';
@@ -526,6 +847,10 @@ function showCapionByDivId(divId) {
 	showMask();
 	ShowDivCenter(divId);
 }
+function hideCapionByDivId(divId) {
+	hideMask();
+	hideDiv(divId);
+}
 
 function showCapion() {
 	var divName = "#shade";
@@ -554,6 +879,10 @@ function minus(objid) {
 }
 function plus(objid) {
 	$(objid).val(parseInt($(objid).val()) + 1);
+}
+
+function onlyNum(value) {
+	return value.replace(/[^\d.]/g, '');
 }
 
 /**

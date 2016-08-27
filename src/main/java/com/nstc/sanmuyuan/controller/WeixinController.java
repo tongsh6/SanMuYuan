@@ -66,4 +66,8 @@ public class WeixinController extends Controller {
 			renderJson(message);
 		}
 	}
+
+	public void page() {
+		renderJson("weixinuserpage", WeixinUser.dao.paginate(getParaToInt(0, 1), 6));
+	}
 }

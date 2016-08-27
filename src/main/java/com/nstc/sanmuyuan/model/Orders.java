@@ -1,5 +1,11 @@
 package com.nstc.sanmuyuan.model;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.ActiveRecordException;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.nstc.sanmuyuan.model.base.BaseOrders;
 
 /**
@@ -8,4 +14,43 @@ import com.nstc.sanmuyuan.model.base.BaseOrders;
 @SuppressWarnings("serial")
 public class Orders extends BaseOrders<Orders> {
 	public static final Orders dao = new Orders();
+
+	public List<Orders> list() {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select orderid,wu.id,productid, FORMAT(o.price,2)price,ifnull(o.remark,'')remark");
+		sql.append(" from ORDERS o");
+		sql.append(" left join WEIXIN_USER wu on wu.openid=o.openid");
+		sql.append(" ORDER by o.orderid desc");
+		return find(sql.toString());
+	}
+
+	public Orders info(String strOrderid) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select orderid,o.openid,wu.nickname,wu.id,o.productid,p.productname, FORMAT(o.price,2)price,ifnull(o.remark,'')remark");
+		sql.append(" from ORDERS o");
+		sql.append(" left join WEIXIN_USER wu on wu.openid=o.openid");
+		sql.append(" left join product p on o.productid=p.productid");
+		sql.append(" where o.orderid = ? ");
+		return findFirst(sql.toString(), strOrderid);
+	}
+
+	public void del(String strOrderid) throws Exception {
+		try {
+			Db.tx(new IAtom() {
+
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+
+					reslut = deleteById(strOrderid);
+					if (reslut) {
+						Db.update("delete from DISTRIBUTION_PLAN where orderid = ?", strOrderid);
+					}
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
 }
