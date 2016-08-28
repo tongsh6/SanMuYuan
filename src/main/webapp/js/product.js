@@ -92,7 +92,7 @@ function addProductCallBack(data) {
 	strHtml += '</div>';
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
-	strHtml += '<label>备注</label><input type="text"  name="product.remark" value="" class="form-control"> ';
+	strHtml += '<label>备注</label><textarea name="product.remark" value="" class="form-control"></textarea> ';
 	strHtml += '</div>';
 	strHtml += '</form>';
 	strHtml += '</div>';
@@ -180,7 +180,7 @@ function editProductCallBack(data) {
 		strHtml += '</div>';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
-		strHtml += '<label>备注</label><textarea name="product.remark" value="' + data.remark + '" class="form-control"/> ';
+		strHtml += '<label>备注</label><textarea name="product.remark" class="form-control">' + data.remark + '</textarea> ';
 		strHtml += '</div>';
 		strHtml += '</form>';
 		strHtml += '</div>';
