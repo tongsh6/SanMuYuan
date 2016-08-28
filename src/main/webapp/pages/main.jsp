@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>管理页面</title>
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="author" content="">
-<link rel="stylesheet" type="text/css"
-	href="lib/bootstrap/css/bootstrap.css">
-<link rel="stylesheet" type="text/css"
-	href="lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-datepicker.min.css"/>
 <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
 <link rel="stylesheet" href="css/Balloon.css">
 <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
@@ -91,7 +86,7 @@ th {
 	position: absolute;
 	z-index: 1003;
 	width: 25%;
-	height: 45%;
+	height: 55%;
 	/* 	text-align: left; */
 	background-color: #DBE5F1;
 	display: table;
@@ -136,22 +131,16 @@ th {
 	<div id="mask" class="mask"></div>
 	<div class="navbar navbar-default" role="navigation">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="sr-only">Toggle navigation</span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 			</button>
 			<a class="" href="index.html"><span class="navbar-brand">三亩园</span></a>
 		</div>
 
 		<div class="navbar-collapse collapse" style="height: 1px;">
 			<ul id="main-menu" class="nav navbar-nav navbar-right">
-				<li class="dropdown hidden-xs"><a href="#"
-					class="dropdown-toggle" data-toggle="dropdown"> <span
-						class="glyphicon glyphicon-user padding-right-small"
-						style="position: relative; top: 3px;"></span>${ sessionScope.user.uname}<i
-						class="fa fa-caret-down"></i>
+				<li class="dropdown hidden-xs"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-user padding-right-small"
+						style="position: relative; top: 3px;"></span>${ sessionScope.user.uname}<i class="fa fa-caret-down"></i>
 				</a>
 					<ul class="dropdown-menu">
 						<li><a href="sysuser/logout">注销</a></li>
@@ -175,9 +164,7 @@ th {
 				</div>
 			</div>
 		</div>
-		<a href="#"
-			style="float: right; line-height: 1.25em; display: inline-block; padding: .75em 0em;"><i
-			class="fa fa-arrow-circle-up"></i>回到顶部</a>
+		<a href="#" style="float: right; line-height: 1.25em; display: inline-block; padding: .75em 0em;"><i class="fa fa-arrow-circle-up"></i>回到顶部</a>
 	</div>
 	<div id="shade" class="shade">
 		<div class="Table-Cell">
@@ -203,6 +190,8 @@ th {
 	</div>
 	<DIV id="cfm"></DIV>
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
+	<script src="lib/bootstrap/js/bootstrap-datepicker.min.js"></script>
+	<script src="lib/bootstrap/js/bootstrap-datepicker.zh-CN.min.js"></script>
 	<script src="js/selectmenu.js"></script>
 	<script src="js/sysuser.js"></script>
 	<script src="js/weixinuser.js"></script>
@@ -255,6 +244,5 @@ th {
 			})
 		});
 	</script>
-
 </body>
 </html>
