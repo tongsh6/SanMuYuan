@@ -204,6 +204,13 @@ th {
 	<DIV id="cfm"></DIV>
 	<script src="lib/bootstrap/js/bootstrap.js"></script>
 	<script src="js/selectmenu.js"></script>
+	<script src="js/sysuser.js"></script>
+	<script src="js/weixinuser.js"></script>
+	<script src="js/product.js"></script>
+	<script src="js/orders.js"></script>
+	<script src="js/plan.js"></script>
+	<script src="js/query.js"></script>
+	<script src="js/utils.js"></script>
 	<script src="js/Balloon.js"></script>
 	<script type="text/javascript">
 		$("[rel=tooltip]").tooltip();
@@ -234,7 +241,7 @@ th {
 					if (result != null && result.length > 0) {
 						var lihtml = "";
 						for (i = 0; i < result.length; i++) {
-							lihtml += "<li><a href='javascript:void(0);' onclick='selectMenu(" + result[i].menucode + ")' id='menu_" + result[i].menucode + "' class='nav-header'>" + result[i].menuname + "</a></li>"
+							lihtml += "<li><a href='javascript:void(0);' onclick='selectMenu(this)' id='" + result[i].menucode + "' class='nav-header'>" + result[i].menuname + "</a></li>"
 						}
 						$("#menutreeul").html(lihtml);
 
