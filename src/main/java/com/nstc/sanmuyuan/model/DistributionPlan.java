@@ -1,5 +1,11 @@
 package com.nstc.sanmuyuan.model;
 
+import java.sql.SQLException;
+import java.util.List;
+
+import com.jfinal.plugin.activerecord.ActiveRecordException;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.nstc.sanmuyuan.model.base.BaseDistributionPlan;
 
 /**
@@ -8,4 +14,109 @@ import com.nstc.sanmuyuan.model.base.BaseDistributionPlan;
 @SuppressWarnings("serial")
 public class DistributionPlan extends BaseDistributionPlan<DistributionPlan> {
 	public static final DistributionPlan dao = new DistributionPlan();
+
+	public List<DistributionPlan> list() {
+		StringBuffer subquery = new StringBuffer();
+		subquery.append("select pi.planid, group_concat((c.cname || ' ' || pi.itemnumber)");
+		subquery.append(" order by pi.cid separator '  ' ) as detail");
+		subquery.append(" from plan_item pi left join COMMODITIES c on c.cid = pi.cid");
+		subquery.append(" group by pi.planid");
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("select dp.planid, dp.orderid, p.productid, p.productname plandate, t.detail,");
+		sql.append("	(case dp.planstate when '1' then '未配送' when '2' then '已配送' end ) planstate, dp.remark");
+		sql.append(" from sanmuyuan.distribution_plan dp ");
+		sql.append(" left join product p on dp.productid = dp.productid ");
+		sql.append(" left join(" + subquery.toString() + ") t on t.planid = dp.planid");
+		return find(sql.toString());
+	}
+
+	public DistributionPlan info(String strPlanid) {
+		DistributionPlan distributionPlan = findById(strPlanid);
+
+		StringBuffer sql = new StringBuffer("select pi.itemid,pi.planid,pi.itemnumber,pi.cid,c.cname ");
+		sql.append(" from PLAN_ITEM pi left join COMMODITIES c on c.cid = pi.cid");
+		sql.append(" where pi.planid = ?");
+		sql.append(" ORDER BY pi.cid ");
+
+		List<PlanItem> items = PlanItem.dao.find(sql.toString(), distributionPlan.getPlanid());
+		distributionPlan.put("items", items);
+		return distributionPlan;
+
+	}
+
+	public void save(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
+		try {
+			Db.tx(new IAtom() {
+
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+					distributionPlan.setRemark(distributionPlan.getRemark() == null ? "" : distributionPlan.getRemark());
+					reslut = distributionPlan.save();
+					if (reslut) {
+						Long planid = distributionPlan.getPlanid();
+						for (PlanItem planItem : items) {
+							planItem.setPlanid(planid);
+							reslut = planItem.save();
+							if (!reslut) {
+								break;
+							}
+						}
+					}
+
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
+
+	public void update(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
+		try {
+			Db.tx(new IAtom() {
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+					reslut = distributionPlan.update();
+					if (reslut) {
+						for (PlanItem planItem : items) {
+							reslut = planItem.update();
+							if (!reslut) {
+								break;
+							}
+						}
+					}
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
+
+	public void del(String strPlanid) throws Exception {
+		try {
+			Db.tx(new IAtom() {
+
+				@Override
+				public boolean run() throws SQLException {
+					boolean reslut = false;
+
+					reslut = deleteById(strPlanid);
+					if (reslut) {
+						int ret = Db.update("delete from PLAN_ITEM where planid = ?", strPlanid);
+						if (ret <= 0) {
+							reslut = false;
+						}
+					}
+					return reslut;
+				}
+			});
+		} catch (ActiveRecordException e) {
+			throw new Exception(e);
+		}
+	}
+
 }
