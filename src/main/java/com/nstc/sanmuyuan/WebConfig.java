@@ -14,6 +14,7 @@ import com.jfinal.plugin.druid.DruidStatViewHandler;
 import com.jfinal.render.ViewType;
 import com.nstc.sanmuyuan.Interceptor.AuthInterceptor;
 import com.nstc.sanmuyuan.controller.CommoditiesController;
+import com.nstc.sanmuyuan.controller.DistributionPlanController;
 import com.nstc.sanmuyuan.controller.MainController;
 import com.nstc.sanmuyuan.controller.MenuController;
 import com.nstc.sanmuyuan.controller.OrdersController;
@@ -40,6 +41,7 @@ public class WebConfig extends JFinalConfig {
 		me.add("/product", ProductController.class);
 		me.add("/commodities", CommoditiesController.class);
 		me.add("/orders", OrdersController.class);
+		me.add("/plans", DistributionPlanController.class);
 	}
 
 	public static DruidPlugin createDruidPlugin() {
