@@ -2,14 +2,12 @@ package com.nstc.sanmuyuan.controller;
 
 import java.util.List;
 
-import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import com.nstc.sanmuyuan.message.ResultMessage;
 import com.nstc.sanmuyuan.model.Orders;
 import com.nstc.sanmuyuan.service.OrdersService;
 import com.nstc.sanmuyuan.service.impl.OrdersServiceImpl;
-import com.nstc.sanmuyuan.validator.OrdersValidator;
 
 public class OrdersController extends Controller {
 
@@ -32,7 +30,6 @@ public class OrdersController extends Controller {
 		renderJson(orders);
 	}
 
-	@Before(OrdersValidator.class)
 	public void save() {
 		ordersService = new OrdersServiceImpl();
 
@@ -57,7 +54,6 @@ public class OrdersController extends Controller {
 		}
 	}
 
-	@Before(OrdersValidator.class)
 	public void update() {
 		ordersService = new OrdersServiceImpl();
 
