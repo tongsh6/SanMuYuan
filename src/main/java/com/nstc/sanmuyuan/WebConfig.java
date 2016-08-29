@@ -19,6 +19,7 @@ import com.nstc.sanmuyuan.controller.MainController;
 import com.nstc.sanmuyuan.controller.MenuController;
 import com.nstc.sanmuyuan.controller.OrdersController;
 import com.nstc.sanmuyuan.controller.ProductController;
+import com.nstc.sanmuyuan.controller.QueryController;
 import com.nstc.sanmuyuan.controller.SysUserController;
 import com.nstc.sanmuyuan.controller.WeixinController;
 import com.nstc.sanmuyuan.model._MappingKit;
@@ -42,6 +43,7 @@ public class WebConfig extends JFinalConfig {
 		me.add("/commodities", CommoditiesController.class);
 		me.add("/orders", OrdersController.class);
 		me.add("/plans", DistributionPlanController.class);
+		me.add("/query", QueryController.class);
 	}
 
 	public static DruidPlugin createDruidPlugin() {
