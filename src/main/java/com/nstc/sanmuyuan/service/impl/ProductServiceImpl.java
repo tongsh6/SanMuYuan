@@ -19,18 +19,18 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void update(Product product, List<ProductItem> items) throws Exception {
-		product.update(product, items);
+	public boolean update(Product product, List<ProductItem> items) throws Exception {
+		return product.update(product, items);
 	}
 
 	@Override
-	public void save(Product product, List<ProductItem> items) throws Exception {
-		product.save(product, items);
+	public boolean save(Product product, List<ProductItem> items) throws Exception {
+		return product.save(product, items);
 	}
 
 	@Override
-	public void del(String strProductid) throws Exception {
-		Product.dao.del(strProductid);
+	public boolean del(String strProductid) throws Exception {
+		return Product.dao.del(strProductid);
 	}
 
 }

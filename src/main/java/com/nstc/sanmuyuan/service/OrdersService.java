@@ -13,5 +13,5 @@ public interface OrdersService {
 
 	boolean update(Orders orders) throws Exception;
 
-	void del(String strOrderid) throws Exception;
+	boolean del(String strOrderid) throws Exception;
 }

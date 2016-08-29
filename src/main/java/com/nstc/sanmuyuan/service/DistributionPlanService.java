@@ -10,10 +10,10 @@ public interface DistributionPlanService {
 
 	DistributionPlan info(String strPlanid);
 
-	void save(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception;
+	boolean save(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception;
 
-	void del(String strPlanid) throws Exception;
+	boolean del(String strPlanid) throws Exception;
 
-	void update(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception;
+	boolean update(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception;
 
 }

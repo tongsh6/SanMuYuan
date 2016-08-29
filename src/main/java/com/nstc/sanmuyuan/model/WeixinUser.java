@@ -20,10 +20,10 @@ public class WeixinUser extends BaseWeixinUser<WeixinUser> {
 		return find("select id,openid,nickname, ifnull(phoneno,'')phoneno,ifnull(addressed,'')addressed,ifnull(linkname,'')linkname,ifnull(linktelno,'')linktelno,ifnull(remark,'')remark from WEIXIN_USER order by id");
 	}
 
-	public void batchSave(List<WeixinUser> userInfos) throws Exception {
+	public boolean batchSave(List<WeixinUser> userInfos) throws Exception {
 
 		try {
-			Db.tx(new IAtom() {
+			return Db.tx(new IAtom() {
 
 				@Override
 				public boolean run() throws SQLException {

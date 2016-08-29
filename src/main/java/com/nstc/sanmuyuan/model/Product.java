@@ -42,9 +42,9 @@ public class Product extends BaseProduct<Product> {
 
 	}
 
-	public void save(Product product, List<ProductItem> items) throws Exception {
+	public boolean save(Product product, List<ProductItem> items) throws Exception {
 		try {
-			Db.tx(new IAtom() {
+			return Db.tx(new IAtom() {
 
 				@Override
 				public boolean run() throws SQLException {
@@ -70,9 +70,9 @@ public class Product extends BaseProduct<Product> {
 		}
 	}
 
-	public void update(Product product, List<ProductItem> items) throws Exception {
+	public boolean update(Product product, List<ProductItem> items) throws Exception {
 		try {
-			Db.tx(new IAtom() {
+			return Db.tx(new IAtom() {
 
 				@Override
 				public boolean run() throws SQLException {
@@ -96,9 +96,9 @@ public class Product extends BaseProduct<Product> {
 		}
 	}
 
-	public void del(String strProductid) throws Exception {
+	public boolean del(String strProductid) throws Exception {
 		try {
-			Db.tx(new IAtom() {
+			return Db.tx(new IAtom() {
 
 				@Override
 				public boolean run() throws SQLException {

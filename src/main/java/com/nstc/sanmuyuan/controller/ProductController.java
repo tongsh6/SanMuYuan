@@ -9,7 +9,6 @@ import com.jfinal.log.Log;
 import com.nstc.sanmuyuan.message.ResultMessage;
 import com.nstc.sanmuyuan.model.Product;
 import com.nstc.sanmuyuan.model.ProductItem;
-import com.nstc.sanmuyuan.model.WeixinUser;
 import com.nstc.sanmuyuan.service.ProductService;
 import com.nstc.sanmuyuan.service.impl.ProductServiceImpl;
 import com.nstc.sanmuyuan.validator.ProductValidator;
@@ -54,8 +53,13 @@ public class ProductController extends Controller {
 		}
 
 		try {
-			productService.save(product, items);
-			message.setResultMsg("操作成功！");
+			boolean result = productService.save(product, items);
+			if (result) {
+				message.setResultMsg("操作成功！");
+			} else {
+				message.setResultCode(-1);
+				message.setResultMsg("操做失败！");
+			}
 		} catch (Exception e) {
 			message.setResultCode(-1);
 			message.setResultMsg("操做失败！");
@@ -84,8 +88,13 @@ public class ProductController extends Controller {
 				item.setItemnumber(itemnumbers[i]);
 				items.add(item);
 			}
-			productService.update(product, items);
-			message.setResultMsg("操作成功！");
+			boolean result = productService.update(product, items);
+			if (result) {
+				message.setResultMsg("操作成功！");
+			} else {
+				message.setResultCode(-1);
+				message.setResultMsg("操做失败！");
+			}
 		} catch (Exception e) {
 			message.setResultCode(-1);
 			message.setResultMsg("操做失败！");
@@ -101,8 +110,13 @@ public class ProductController extends Controller {
 
 		ResultMessage message = new ResultMessage();
 		try {
-			productService.del(strProductid);
-			message.setResultMsg("操作成功！");
+			boolean result = productService.del(strProductid);
+			if (result) {
+				message.setResultMsg("操作成功！");
+			} else {
+				message.setResultCode(-1);
+				message.setResultMsg("操做失败！");
+			}
 		} catch (Exception e) {
 			message.setResultCode(-1);
 			message.setResultMsg("操做失败！");

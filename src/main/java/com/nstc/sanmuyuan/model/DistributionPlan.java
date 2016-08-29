@@ -23,10 +23,10 @@ public class DistributionPlan extends BaseDistributionPlan<DistributionPlan> {
 		subquery.append(" group by pi.planid");
 
 		StringBuffer sql = new StringBuffer();
-		sql.append("select dp.planid, dp.orderid, p.productid, p.productname plandate, t.detail,");
+		sql.append("select dp.planid, dp.orderid,dp.plandate, p.productid, p.productname productname, t.detail,");
 		sql.append("	(case dp.planstate when '1' then '未配送' when '2' then '已配送' end ) planstate, dp.remark");
 		sql.append(" from sanmuyuan.distribution_plan dp ");
-		sql.append(" left join product p on dp.productid = dp.productid ");
+		sql.append(" left join product p on dp.productid = p.productid ");
 		sql.append(" left join(" + subquery.toString() + ") t on t.planid = dp.planid");
 		return find(sql.toString());
 	}
@@ -45,27 +45,27 @@ public class DistributionPlan extends BaseDistributionPlan<DistributionPlan> {
 
 	}
 
-	public void save(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
+	public boolean save(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
 		try {
-			Db.tx(new IAtom() {
+			return Db.tx(new IAtom() {
 
 				@Override
 				public boolean run() throws SQLException {
-					boolean reslut = false;
+					boolean res = false;
 					distributionPlan.setRemark(distributionPlan.getRemark() == null ? "" : distributionPlan.getRemark());
-					reslut = distributionPlan.save();
-					if (reslut) {
+					res = distributionPlan.save();
+					if (res) {
 						Long planid = distributionPlan.getPlanid();
 						for (PlanItem planItem : items) {
 							planItem.setPlanid(planid);
-							reslut = planItem.save();
-							if (!reslut) {
+							res = planItem.save();
+							if (!res) {
 								break;
 							}
 						}
 					}
 
-					return reslut;
+					return res;
 				}
 			});
 		} catch (ActiveRecordException e) {
@@ -73,50 +73,53 @@ public class DistributionPlan extends BaseDistributionPlan<DistributionPlan> {
 		}
 	}
 
-	public void update(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
+	public boolean update(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
+		boolean reslut = false;
 		try {
-			Db.tx(new IAtom() {
+			reslut = Db.tx(new IAtom() {
 				@Override
 				public boolean run() throws SQLException {
-					boolean reslut = false;
-					reslut = distributionPlan.update();
-					if (reslut) {
+					boolean res = false;
+					res = distributionPlan.update();
+					if (res) {
 						for (PlanItem planItem : items) {
-							reslut = planItem.update();
-							if (!reslut) {
+							res = planItem.update();
+							if (!res) {
 								break;
 							}
 						}
 					}
-					return reslut;
+					return res;
 				}
 			});
 		} catch (ActiveRecordException e) {
 			throw new Exception(e);
 		}
+		return reslut;
 	}
 
-	public void del(String strPlanid) throws Exception {
+	public boolean del(String strPlanid) throws Exception {
+		boolean reslut = false;
 		try {
-			Db.tx(new IAtom() {
+			reslut = Db.tx(new IAtom() {
 
 				@Override
 				public boolean run() throws SQLException {
-					boolean reslut = false;
-
-					reslut = deleteById(strPlanid);
-					if (reslut) {
+					boolean res = false;
+					res = deleteById(strPlanid);
+					if (res) {
 						int ret = Db.update("delete from PLAN_ITEM where planid = ?", strPlanid);
 						if (ret <= 0) {
-							reslut = false;
+							res = false;
 						}
 					}
-					return reslut;
+					return res;
 				}
 			});
 		} catch (ActiveRecordException e) {
 			throw new Exception(e);
 		}
+		return reslut;
 	}
 
 }

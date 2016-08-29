@@ -10,9 +10,9 @@ public interface ProductService {
 
 	Product info(String strProductid);
 
-	void save(Product product, List<ProductItem> items) throws Exception;
+	boolean save(Product product, List<ProductItem> items) throws Exception;
 
-	void del(String strProductid) throws Exception;
+	boolean del(String strProductid) throws Exception;
 
-	void update(Product product, List<ProductItem> items) throws Exception;
+	boolean update(Product product, List<ProductItem> items) throws Exception;
 }

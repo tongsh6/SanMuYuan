@@ -19,18 +19,18 @@ public class DistributionPlanServiceImpl implements DistributionPlanService {
 	}
 
 	@Override
-	public void save(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
-		distributionPlan.save(distributionPlan, items);
+	public boolean save(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
+		return distributionPlan.save(distributionPlan, items);
 	}
 
 	@Override
-	public void del(String strPlanid) throws Exception {
-		DistributionPlan.dao.del(strPlanid);
+	public boolean del(String strPlanid) throws Exception {
+		return DistributionPlan.dao.del(strPlanid);
 	}
 
 	@Override
-	public void update(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
-		distributionPlan.update(distributionPlan, items);
+	public boolean update(DistributionPlan distributionPlan, List<PlanItem> items) throws Exception {
+		return distributionPlan.update(distributionPlan, items);
 	}
 
 }

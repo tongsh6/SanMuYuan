@@ -85,8 +85,13 @@ public class OrdersController extends Controller {
 
 		ResultMessage message = new ResultMessage();
 		try {
-			ordersService.del(strOrderid);
-			message.setResultMsg("操作成功！");
+			boolean result = ordersService.del(strOrderid);
+			if (result) {
+				message.setResultMsg("操作成功！");
+			} else {
+				message.setResultCode(-1);
+				message.setResultMsg("操做失败！");
+			}
 		} catch (Exception e) {
 			message.setResultCode(-1);
 			message.setResultMsg("操做失败！");
@@ -96,4 +101,7 @@ public class OrdersController extends Controller {
 		}
 	}
 
+	public void page() {
+		renderJson("orderpage", Orders.dao.paginate(getParaToInt(0, 1), 6));
+	}
 }

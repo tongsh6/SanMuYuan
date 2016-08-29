@@ -37,7 +37,7 @@ public class DistributionPlanController extends Controller {
 
 		ResultMessage message = new ResultMessage();
 
-		DistributionPlan DistributionPlan = getModel(DistributionPlan.class);
+		DistributionPlan distributionPlan = getModel(DistributionPlan.class);
 		List<PlanItem> items = new ArrayList<PlanItem>();
 
 		Long[] cids = getParaValuesToLong("planItem.cid");
@@ -50,8 +50,12 @@ public class DistributionPlanController extends Controller {
 		}
 
 		try {
-			distributionPlanService.save(DistributionPlan, items);
-			message.setResultMsg("操作成功！");
+			boolean res = distributionPlanService.save(distributionPlan, items);
+			if (res) {
+				message.setResultMsg("操作成功！");
+			} else {
+				throw new Exception("操做失败！");
+			}
 		} catch (Exception e) {
 			message.setResultCode(-1);
 			message.setResultMsg("操做失败！");
@@ -79,8 +83,12 @@ public class DistributionPlanController extends Controller {
 				item.setItemnumber(itemnumbers[i]);
 				items.add(item);
 			}
-			distributionPlanService.update(DistributionPlan, items);
-			message.setResultMsg("操作成功！");
+			boolean res = distributionPlanService.update(DistributionPlan, items);
+			if (res) {
+				message.setResultMsg("操作成功！");
+			} else {
+				throw new Exception("操做失败！");
+			}
 		} catch (Exception e) {
 			message.setResultCode(-1);
 			message.setResultMsg("操做失败！");
@@ -96,8 +104,12 @@ public class DistributionPlanController extends Controller {
 
 		ResultMessage message = new ResultMessage();
 		try {
-			distributionPlanService.del(strDistributionPlanid);
-			message.setResultMsg("操作成功！");
+			boolean res = distributionPlanService.del(strDistributionPlanid);
+			if (res) {
+				message.setResultMsg("操作成功！");
+			} else {
+				throw new Exception("操做失败！");
+			}
 		} catch (Exception e) {
 			message.setResultCode(-1);
 			message.setResultMsg("操做失败！");

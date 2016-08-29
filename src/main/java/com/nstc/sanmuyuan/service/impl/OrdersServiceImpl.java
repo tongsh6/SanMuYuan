@@ -28,8 +28,8 @@ public class OrdersServiceImpl implements OrdersService {
 	}
 
 	@Override
-	public void del(String strOrderid) throws Exception {
-		Orders.dao.del(strOrderid);
+	public boolean del(String strOrderid) throws Exception {
+		return Orders.dao.del(strOrderid);
 	}
 
 }
