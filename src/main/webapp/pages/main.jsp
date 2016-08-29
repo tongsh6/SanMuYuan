@@ -86,7 +86,7 @@ th {
 	position: absolute;
 	z-index: 1003;
 	width: 25%;
-	height: 55%;
+	height: 45%;
 	/* 	text-align: left; */
 	background-color: #DBE5F1;
 	display: table;
@@ -153,9 +153,8 @@ th {
 		<ul id="menutreeul" style="text-align: center;">
 		</ul>
 	</div>
-
 	<div class="content">
-		<div class="main-content">
+		<div id="maincontent" class="main-content">
 			<div class="row">
 				<div class="col-sm-12 col-md-12">
 					<div id="mainpanel" class="panel panel-default">
@@ -201,6 +200,7 @@ th {
 	<script src="js/query.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/Balloon.js"></script>
+	<script src="js/dateutils.js"></script>
 	<script type="text/javascript">
 		$("[rel=tooltip]").tooltip();
 		$(function() {

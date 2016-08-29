@@ -132,7 +132,7 @@ function editWeixinUserCallBack(data) {
 function weixinUserSave() {
 	var formParam = $("#editform").serialize();// 序列化表格内容为字符串
 
-	weixinUserCancel();
+	Cancel();
 	hideMask();
 	showCapion();
 
@@ -144,19 +144,10 @@ function weixinUserSaveCallBack(data) {
 	if (data != null) {
 		{
 			showCapionMsg(data.resultMsg);
-			weixinUserCancel();
+			Cancel();
 			jsonAjax("get", "weixin/list", showWeixinUserListPage);
 		}
 	}
-}
-
-/**
- * 取消
- */
-function Cancel() {
-	$("#editinfo").html("");
-	hideDiv("#editdiv");
-	hideMask();
 }
 
 function showWeixinUserList(pagenum) {

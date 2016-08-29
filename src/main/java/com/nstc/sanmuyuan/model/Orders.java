@@ -2,10 +2,12 @@ package com.nstc.sanmuyuan.model;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.Page;
 import com.nstc.sanmuyuan.model.base.BaseOrders;
 
 /**
@@ -34,9 +36,9 @@ public class Orders extends BaseOrders<Orders> {
 		return findFirst(sql.toString(), strOrderid);
 	}
 
-	public void del(String strOrderid) throws Exception {
+	public boolean del(String strOrderid) throws Exception {
 		try {
-			Db.tx(new IAtom() {
+			return Db.tx(new IAtom() {
 
 				@Override
 				public boolean run() throws SQLException {
@@ -53,4 +55,80 @@ public class Orders extends BaseOrders<Orders> {
 			throw new Exception(e);
 		}
 	}
+
+	public Page<Orders> paginate(int pageNumber, int pageSize) {
+		String select = "select orderid,wu.id,productid, FORMAT(o.price,2)price,ifnull(o.remark,'')remark";
+
+		String sqlExceptSelect = " from ORDERS o left join WEIXIN_USER wu on wu.openid=o.openid  ORDER by o.orderid ";
+
+		return paginate(pageNumber, pageSize, select, sqlExceptSelect);
+	}
+
+	public List<Orders> query(Map<String, String> params) {
+		StringBuffer sql = new StringBuffer();
+		sql.append("select orders.orderid,wu.id weixinid,wu.nickname,orders.productid,p.productname,FORMAT(orders.price,2)price,p.cycle,d.detail,dp.adetail,");
+		sql.append("	DATE_FORMAT(datet.nextdate,'%Y-%m-%d')nextdate,");
+		sql.append("	(case when sdatet.plinum=0 then '未开始配送' when sdatet.plinum>0 and sdatet.plinum<sdatet.pinum then '部分已配送'");
+		sql.append("	 when sdatet.plinum>=sdatet.pinum  then '全部已配送' end )state");
+		sql.append(" from orders orders left join product p on orders.productid = p.productid ");
+		sql.append("	left join weixin_user wu on orders.openid = wu.openid");
+		sql.append("	left join(select pi.productid, group_concat((c.cname || ' ' || pi.itemnumber)");
+		sql.append("			order by pi.cid separator '  ') as detail");
+		sql.append("				from PRODUCT_ITEM pi left join COMMODITIES c on c.cid = pi.cid");
+		sql.append("				group by pi.productid ) d on p.productid = d.productid");
+		sql.append("	left join(select z.orderid, group_concat(");
+		sql.append("				(z.cname || ' ' || z.bNum) ORDER BY z.cname  separator '  ') as adetail");
+		sql.append("				from (select o.orderid,c.cname,");
+		sql.append("							(pi.itemnumber - ifnull(pli.aNum,0)) bNum");
+		sql.append("						from orders o");
+		sql.append("						left join product_item pi on o.productid = pi.productid");
+		sql.append("						left join(select dp.orderid, pi.cid, sum( pi.itemnumber ) aNum");
+		sql.append("								from distribution_plan dp ");
+		sql.append("								left join plan_item pi on dp.planid = pi.planid");
+		sql.append("								where dp.planstate = '2' group by dp.orderid, pi.cid");
+		sql.append("							) pli on o.orderid = pli.orderid and pi.cid = pli.cid");
+		sql.append("						left join commodities c on pi.cid = c.cid");
+		sql.append("						order by o.orderid, c.cid ) z group by z.orderid");
+		sql.append("			) dp on orders.orderid = dp.orderid");
+		sql.append("	 left join (select od.orderid,");
+		sql.append("					 (case p.cycle when '周' then  date_add(ifnull(max(dp.plandate),od.createdate), interval 1 week)");
+		sql.append("					 	when '月' then date_add(ifnull(max(dp.plandate),od.createdate), interval 1 month)");
+		sql.append("					 	when '年' then date_add(ifnull(max(dp.plandate),od.createdate), interval 1 year) end )nextdate	");
+		sql.append("					 from orders od");
+		sql.append("					 left join distribution_plan dp on od.orderid=dp.orderid");
+		sql.append("					 left join product p on p.productid = od.productid");
+		sql.append("					 group by od.orderid) datet on orders.orderid=datet.orderid");
+		sql.append("	 left join (select o.orderid,sum(pi.itemnumber)pinum,sum(ifnull(pli.aNum,0))plinum");
+		sql.append("					from orders o ");
+		sql.append("					left join product_item pi on o.productid = pi.productid");
+		sql.append("					left join(select dp.orderid, pi.cid, sum( pi.itemnumber ) aNum");
+		sql.append("							from distribution_plan dp ");
+		sql.append("							left join plan_item pi on dp.planid = pi.planid");
+		sql.append("							where dp.planstate = '2'");
+		sql.append("							group by dp.orderid, pi.cid");
+		sql.append("						) pli on o.orderid = pli.orderid and pi.cid = pli.cid ");
+		sql.append("					left join commodities c on pi.cid = c.cid");
+		sql.append("					group by o.orderid) sdatet on orders.orderid=sdatet.orderid");
+		if (params != null && params.size() > 0) {
+			sql.append(" where 1=1 ");
+			if (params.get("begdate") != null && !params.get("begdate").equals("")) {
+				sql.append(" and orders.createdate >='" + params.get("begdate") + "'");
+			}
+			if (params.get("enddate") != null && !params.get("enddate").equals("")) {
+				sql.append(" and orders.createdate <='" + params.get("enddate") + "'");
+			}
+			if (params.get("orderid") != null && !params.get("orderid").equals("")) {
+				sql.append(" and cast(orders.orderid as char)  like '" + params.get("orderid") + "%'");
+			}
+			if (params.get("productid") != null && !params.get("productid").equals("")) {
+				sql.append(" and  cast(orders.productid as char) like '" + params.get("productid") + "%'");
+			}
+			if (params.get("weixinuserid") != null && !params.get("weixinuserid").equals("")) {
+				sql.append(" and  cast(wu.id as char) like '" + params.get("weixinuserid") + "%'");
+			}
+		}
+		sql.append(" order by orders.orderid");
+		return find(sql.toString());
+	}
+
 }

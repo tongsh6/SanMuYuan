@@ -99,7 +99,7 @@ function addProductCallBack(data) {
 	strHtml += '</div>';
 	strHtml += '<div class="btn-toolbar list-toolbar">';
 	strHtml += '<button id="productCancelBtn" class="btn btn-default" style="float:right">取消</button>';
-	strHtml += '<button id="productSaveBtn" onclick="productOper(1);" class="btn btn-danger" style="float:right">保存</button>&nbsp;&nbsp;';
+	strHtml += '<button id="productSaveBtn" onclick=productOper("save") class="btn btn-danger" style="float:right">保存</button>&nbsp;&nbsp;';
 	strHtml += '<label class="remember-me" style="color: red;" id="errorMsg"></label>';
 	strHtml += '</div>';
 	strHtml += '</div>';
@@ -187,7 +187,7 @@ function editProductCallBack(data) {
 		strHtml += '</div>';
 		strHtml += '<div class="btn-toolbar list-toolbar">';
 		strHtml += '<button id="productCancelBtn" class="btn btn-default" style="float:right">取消</button>';
-		strHtml += '<button id="productSaveBtn" onclick="productOper(2);" class="btn btn-danger" style="float:right">保存</button>&nbsp;&nbsp;';
+		strHtml += '<button id="productSaveBtn" onclick=productOper("update") class="btn btn-danger" style="float:right">保存</button>&nbsp;&nbsp;';
 		strHtml += '<label class="remember-me" style="color: red;" id="errorMsg"></label>';
 		strHtml += '</div>';
 		strHtml += '</div>';
@@ -204,15 +204,9 @@ function editProductCallBack(data) {
 /**
  * 保存
  */
-function productOper(saveflag) {
+function productOper(oper) {
 	var formParam = $("#editform").serialize();// 序列化表格内容为字符串
 
-	var oper = "";
-	if (saveflag == 1) {
-		oper = "save"
-	} else if (saveflag == 2) {
-		oper = "update"
-	}
 	jsonAjaxForm("post", "product/" + oper, formParam, productOperCallBack);
 }
 

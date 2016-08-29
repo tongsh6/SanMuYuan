@@ -51,6 +51,15 @@ function showCfm(msg, callbackfun) {
 	$('#delcfmModel').modal();
 }
 
+/**
+ * 取消
+ */
+function Cancel() {
+	$("#editinfo").html("");
+	hideDiv("#editdiv");
+	hideMask();
+}
+
 // 兼容火狐、IE8
 function showMask() {
 	$("#mask").css("height", $(document).height());
@@ -148,9 +157,12 @@ function jsonAjax(type, url, callback) {
 		url : url,
 		success : callback,
 		error : function() {
-			jQuery.fn.mBox({
-				message : '请求失败！'
-			});
+			hideCapion();
+			$.FloatConfirm({
+				title : '提示',
+				type : 'error',
+				text : '请求失败！'
+			})
 		}
 	});
 }
@@ -161,9 +173,12 @@ function jsonAjaxForm(type, url, data, callback) {
 		data : data,
 		success : callback,
 		error : function() {
-			jQuery.fn.mBox({
-				message : '请求失败！'
-			});
+			hideCapion();
+			$.FloatConfirm({
+				title : '提示',
+				type : 'error',
+				text : '请求失败！'
+			})
 		}
 	});
 }

@@ -172,6 +172,70 @@ function delOrder(orderid) {
 	});
 }
 
+function showOrderList(pagenum) {
+	if (typeof (pagenum) == "undefined") {
+		pagenum = "";
+	}
+
+	closeListPage();
+	showCapion();
+	jsonAjax("get", "orders/page/" + pagenum, function(data) {
+		hideCapion();
+		if (data != null) {
+			var strHtml = "";
+			strHtml += '<div>';
+			strHtml += '<button id="closelistbtn" type="button" class="close" aria-hidden="true">&times;</button>';
+			strHtml += '</div>';
+			strHtml += '<table class="table">';
+			strHtml += '<thead>';
+			strHtml += '<tr>';
+			strHtml += '<th>订单编号</th>';
+			strHtml += '<th>客户编号</th>';
+			strHtml += '<th>产品编号</th>';
+			strHtml += '<th>实际价格</th>';
+			strHtml += '</tr>';
+			strHtml += '</thead>';
+			strHtml += '<tbody>';
+			if (data.orderpage.list != null && data.orderpage.list.length > 0) {
+				var orders = data.orderpage.list;
+
+				var pNum = (parseInt(data.orderpage.pageNumber) - 1);
+				var nNum = (parseInt(data.orderpage.pageNumber) + 1);
+				var strDisabledP = 'onclick=showOrderList("' + pNum + '")';
+				var strDisabledN = ' onclick=showOrderList("' + nNum + '")';
+
+				if (data.orderpage.pageNumber == 1) {
+					strDisabledP = "";
+				}
+				if (data.orderpage.pageNumber == data.orderpage.totalPage) {
+					strDisabledN = "";
+				}
+
+				for (i = 0; i < orders.length; i++) {
+					strHtml += '<tr ondblclick="dbclickOrderCallBack(this);">';
+					strHtml += '<td>' + orders[i].orderid + '</td>';
+					strHtml += '<td>' + orders[i].id + '</td>';
+					strHtml += '<td>' + orders[i].productid + '</td>';
+					strHtml += '<td align="right">' + orders[i].price + '</td>';
+					strHtml += '</tr>';
+				}
+				strHtml += '</tbody>';
+				strHtml += '</table>';
+				strHtml += '<ul class="pager"> ';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledP + '>&larr; 上一页</a></li>&nbsp;';
+				strHtml += '<span>' + data.orderpage.pageNumber + '/' + data.orderpage.totalPage + '&nbsp;&nbsp;总条数：' + data.orderpage.totalRow + ' </span>';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledN + ' >下一页  &rarr;</a></li>';
+				strHtml += '</ul>';
+			}
+			$("#listinfo").html(strHtml);
+			$("#closelistbtn").click(closeListPage);
+			showCapionByDivId("#listdiv");
+		} else {
+			showCapionMsg("未知错误！");
+		}
+	});
+}
+
 /*
  * Orders end
  */
