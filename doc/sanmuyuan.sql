@@ -121,6 +121,7 @@ CREATE TABLE `ORDERS` (
   `productid` bigint(20) NOT NULL,
   `price` double(14,2) NOT NULL default 0,
   `remark` varchar(255) default NULL,
+  `createdate` DATETIME DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`orderid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000000001 DEFAULT CHARSET=utf8mb4;
 
