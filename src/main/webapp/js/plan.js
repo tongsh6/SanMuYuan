@@ -30,7 +30,7 @@ function showPlansListPage(data) {
 			str += "<td>" + data[i].detail + "</td>";
 			str += "<td>" + data[i].planstate + "</td>";
 			str += "<td>" + data[i].remark + "</td>";
-			str += "<td align='center'><a href='javascript:void(0);' onclick=editOrder('" + data[i].planid + "')><i class='fa fa-pencil'></i></a>&nbsp;&nbsp;";
+			str += "<td align='center'><a href='javascript:void(0);' onclick=editPlan('" + data[i].planid + "')><i class='fa fa-pencil'></i></a>&nbsp;&nbsp;";
 			str += "<a role='button' data-toggle='modal' href='javascript:void(0);' onclick=delPlan('" + data[i].planid + "')><i class='fa fa-trash-o'></i></a></td>";
 			str += "</tr>";
 		}
@@ -104,12 +104,12 @@ function addPlanPage(data) {
 	ShowEditDiv("#editdiv");
 }
 
-function editOrder(planid) {
+function editPlan(planid) {
 	showCapion();
-	jsonAjax("get", "plans/info?planid=" + planid, editOrderCallBack);
+	jsonAjax("get", "plans/info?planid=" + planid, editPlanCallBack);
 }
 
-function editOrderCallBack(data) {
+function editPlanCallBack(data) {
 	hideCapion();
 	if (data != null) {
 		var strHtml = '<div class="row">';

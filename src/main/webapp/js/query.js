@@ -4,7 +4,7 @@
 function showQueryListPage() {
 	var str = '';
 
-	str += '<div class="panel panel-default"> ';
+	str += '<div id="querydiv" class="panel panel-default"> ';
 	str += '<div class="panel-heading"> ';
 	str += '<h3 class="panel-title">' + _menuname + '</h3> ';
 	str += '</div> ';

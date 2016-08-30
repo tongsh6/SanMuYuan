@@ -14,14 +14,19 @@ function selectMenu(menu) {
 	menucode = menu.id;
 	var strHtml = "";
 	if (menucode == "101") {
+		$("#querydiv").hide();
 		jsonAjax("get", "sysuser/list?pagesize=" + _mainpagesize, showSysUserListPage);
 	} else if (menucode == "102") {
+		$("#querydiv").hide();
 		jsonAjax("get", "weixin/list?pagesize=" + _mainpagesize, showWeixinUserListPage);
 	} else if (menucode == "103") {
+		$("#querydiv").hide();
 		jsonAjax("get", "product/list?pagesize=" + _mainpagesize, showProductListPage);
 	} else if (menucode == "104") {
+		$("#querydiv").hide();
 		jsonAjax("get", "orders/list?pagesize=" + _mainpagesize, showOrdersListPage);
 	} else if (menucode == "105") {
+		$("#querydiv").hide();
 		jsonAjax("get", "plans/list?pagesize=" + _mainpagesize, showPlansListPage);
 	} else if (menucode == "106") {
 		showQueryListPage();
