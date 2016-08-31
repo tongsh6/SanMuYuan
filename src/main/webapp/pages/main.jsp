@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-datepicker.min.css"/>
 <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
 <link rel="stylesheet" href="css/Balloon.css">
+<script src="js/respond.js" type="text/javascript"></script><!-- 用来兼容ie8，ie8对bootstrap的栅格不支持 -->
 <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script src="lib/jQuery-Knob/js/jquery.knob.js" type="text/javascript"></script>
 <script type="text/javascript">
