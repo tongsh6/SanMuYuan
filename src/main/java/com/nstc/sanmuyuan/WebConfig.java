@@ -1,6 +1,7 @@
 package com.nstc.sanmuyuan;
 
 import com.alibaba.druid.filter.stat.StatFilter;
+import com.alibaba.druid.wall.WallFilter;
 import com.jfinal.config.Constants;
 import com.jfinal.config.Handlers;
 import com.jfinal.config.Interceptors;
@@ -54,6 +55,9 @@ public class WebConfig extends JFinalConfig {
 	public void configPlugin(Plugins me) {
 		DruidPlugin druidPlugin = createDruidPlugin();
 		druidPlugin.addFilter(new StatFilter());
+		WallFilter wall = new WallFilter();
+		wall.setDbType("mysql");
+		druidPlugin.addFilter(wall);
 		me.add(druidPlugin);
 
 		// 配置ActiveRecord插件

@@ -1,7 +1,9 @@
 package com.nstc.sanmuyuan.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -14,7 +16,10 @@ import com.jfinal.weixin.sdk.api.AccessTokenApi;
 import com.jfinal.weixin.sdk.api.ApiConfig;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import com.jfinal.weixin.sdk.api.ApiResult;
+import com.jfinal.weixin.sdk.api.SnsAccessToken;
+import com.jfinal.weixin.sdk.api.SnsAccessTokenApi;
 import com.jfinal.weixin.sdk.api.UserApi;
+import com.nstc.sanmuyuan.model.Orders;
 import com.nstc.sanmuyuan.model.WeixinUser;
 import com.nstc.sanmuyuan.service.WeiXinUserService;
 import com.nstc.sanmuyuan.weixinhelpe.GetUserInfo;
@@ -211,4 +216,25 @@ public class WeiXinUserServiceImpl implements WeiXinUserService {
 
 	}
 
+	private String getOpenId(String strcode) {
+		String appId = PropKit.get("AppID");
+		String secret = PropKit.get("AppSecret");
+		// 通过code换取网页授权access_token
+		SnsAccessToken snsAccessToken = SnsAccessTokenApi.getSnsAccessToken(appId, secret, strcode);
+
+		return snsAccessToken.getOpenid();
+	}
+
+	@Override
+	public List<Orders> orderlist(String strcode) {
+
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("openid", getOpenId(strcode));
+		return Orders.dao.query(params);
+	}
+
+	@Override
+	public WeixinUser infoByCode(String strcode) {
+		return WeixinUser.dao.findById(getOpenId(strcode));
+	}
 }

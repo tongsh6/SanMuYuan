@@ -95,7 +95,6 @@
 
 		<div class="navbar-collapse collapse" style="height: 1px;"></div>
 	</div>
-	</div>
 
 	<div class="dialog">
 		<div class="panel panel-default">

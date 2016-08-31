@@ -19,6 +19,7 @@ public class SysUserController extends Controller {
 		renderJsp("login.jsp");
 	}
 
+	@Clear(AuthInterceptor.class)
 	@Before(LoginValidator.class)
 	public void login() {
 		SysUser user = getModel(SysUser.class);

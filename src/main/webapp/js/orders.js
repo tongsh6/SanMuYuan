@@ -48,17 +48,25 @@ function addOrdersPage() {
 	var str = "";
 	str += "<tr>";
 	str += "<td>" + '<input type="text" id="orderid" value="' + "" + '" class="form-control" readonly> ' + "</td>";
-	str += "<td><input type='hidden' id='openid'/>" + '<input type="text" id="weixinuserid" value="' + "" + '" class="form-control" readonly onclick="showWeixinUserList();"> ' + "</td>";
-	str += "<td><input type='hidden' id='productid'/>" + '<input type="text" id="productview" value="" class="form-control" readonly onclick="showProductList();" >' + "</td>";
+	str += "<td><input type='hidden' id='openid'/>" + '<input type="text" id="weixinuserid" value="' + "" + '" class="form-control" readonly> ' + "</td>";
+	str += "<td><input type='hidden' id='productid'/>" + '<input type="text" id="productview" value="" class="form-control" readonly >' + "</td>";
 	str += "<td>" + '<input type="number" id="price" value="' + "" + '" class="form-control" style="text-align:right;"> ' + "</td>";
 	str += "<td>" + '<textarea id="remark" value="' + "" + '" class="form-control"/> ' + "</td>";
 	str += "<td align='center'><a href='javascript:void(0);' title='保存' id='saveorderpagebtn'><i class='fa fa-save'></i></a>&nbsp;&nbsp;";
-	str += "<a href='javascript:void(0);' title='取消'  onclick=unDoOrder()><i class='fa fa-undo'></i></a></td>";
+	str += "<a href='javascript:void(0);' title='取消' id='undobtn'><i class='fa fa-undo'></i></a></td>";
 	str += "</tr>";
 
 	addTr("ordertable", 0, str);
 	$("#saveorderpagebtn").click(function() {
 		operOrder("save");
+	});
+	$("#undobtn").click(unDoOrder);
+
+	$("#weixinuserid").click(function() {
+		showWeixinUserList();
+	});
+	$("#productview").click(function() {
+		showProductList();
 	});
 	addCountNum++;
 }
@@ -74,8 +82,8 @@ function editOrder(tr) {
 	} else {
 		jsonAjax("get", "orders/info?orderid=" + orderid, function(data) {
 			tr.cells[0].innerHTML = '<input type="text" id="orderid" value="' + orderid + '" class="form-control" readonly>';
-			tr.cells[1].innerHTML = '<input type="hidden" id="openid" value="' + data.openid + '"/><input type="text" id="weixinuserid" value="' + data.id + '(' + data.nickname + ')' + '" class="form-control" readonly onclick="showWeixinUserList();"> ';
-			tr.cells[2].innerHTML = '<input type="hidden" id="productid" value="' + data.productid + '"/><input type="text" id="productview" value="' + data.productid + '(' + data.productname + ')' + '" class="form-control" readonly onclick="showProductList();" >';
+			tr.cells[1].innerHTML = '<input type="hidden" id="openid" value="' + data.openid + '"/><input type="text" id="weixinuserid" value="' + data.id + '(' + data.nickname + ')' + '" class="form-control" readonly> ';
+			tr.cells[2].innerHTML = '<input type="hidden" id="productid" value="' + data.productid + '"/><input type="text" id="productview" value="' + data.productid + '(' + data.productname + ')' + '" class="form-control" readonly>';
 			tr.cells[3].innerHTML = '<input type="number" id="price" value="' + data.price.replace(/,/gm, '') + '" class="form-control" style="text-align:right;"> ';
 			tr.cells[4].innerHTML = '<textarea id="remark" class="form-control">' + data.remark + '</textarea> ';
 			var html = '<a href="javascript:void(0);" title="保存" id="saveorderpagebtn"><i class="fa fa-save"></i></a>&nbsp;&nbsp;';
@@ -84,6 +92,12 @@ function editOrder(tr) {
 			tr.cells[5].align = "center";
 			$("#saveorderpagebtn").click(function() {
 				operOrder("update");
+			});
+			$("#weixinuserid").click(function() {
+				showWeixinUserList();
+			});
+			$("#productview").click(function() {
+				showProductList();
 			});
 		})
 	}

@@ -10,9 +10,10 @@ var _mainpagesize = 15;
  */
 function selectMenu(menu) {
 	showCapion();
-	_menuname = menu.text;
+	_menuname = menu.innerText;
 	menucode = menu.id;
 	var strHtml = "";
+	addCountNum = 0;
 	if (menucode == "101") {
 		$("#querydiv").hide();
 		jsonAjax("get", "sysuser/list?pagesize=" + _mainpagesize, showSysUserListPage);

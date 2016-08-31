@@ -11,8 +11,9 @@ public class AuthInterceptor implements Interceptor {
 	public void intercept(Invocation inv) {
 		Controller controller = inv.getController();
 		SysUser user = controller.getSessionAttr("user");
-		// 判断登录条件是否成立(除了登录功能不拦截之外，其他都拦截)
-		if (user == null && !inv.getMethod().getName().equals("login")) {
+		// 判断登录条件是否成立
+
+		if (user == null) {
 			controller.redirect("/sysuser");
 		} else {
 			inv.invoke();

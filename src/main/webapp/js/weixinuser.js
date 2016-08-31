@@ -110,7 +110,7 @@ function editWeixinUserCallBack(data) {
 		strHtml += '</form>';
 		strHtml += '</div>';
 		strHtml += '</div>';
-		strHtml += '<div class="btn-toolbar list-toolbar" stlye="float:right;">';
+		strHtml += '<div class="btn-toolbar list-toolbar" style="float:right;">';
 		strHtml += '<button id="weixinUserCancelBtn" class="btn btn-default" style="float:right">取消</button>';
 		strHtml += '<button id="weixinUserSaveBtn" class="btn btn-danger" style="float:right">保存</button>&nbsp;&nbsp;';
 		strHtml += '</div>';

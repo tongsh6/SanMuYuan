@@ -112,10 +112,10 @@ public class Orders extends BaseOrders<Orders> {
 		if (params != null && params.size() > 0) {
 			sql.append(" where 1=1 ");
 			if (params.get("begdate") != null && !params.get("begdate").equals("")) {
-				sql.append(" and orders.createdate >='" + params.get("begdate") + "'");
+				sql.append(" and DATE_FORMAT(orders.createdate,'%Y-%m-%d') >='" + params.get("begdate") + "'");
 			}
 			if (params.get("enddate") != null && !params.get("enddate").equals("")) {
-				sql.append(" and orders.createdate <='" + params.get("enddate") + "'");
+				sql.append(" and DATE_FORMAT(orders.createdate,'%Y-%m-%d') <='" + params.get("enddate") + "'");
 			}
 			if (params.get("orderid") != null && !params.get("orderid").equals("")) {
 				sql.append(" and cast(orders.orderid as char)  like '" + params.get("orderid") + "%'");
@@ -125,6 +125,9 @@ public class Orders extends BaseOrders<Orders> {
 			}
 			if (params.get("weixinuserid") != null && !params.get("weixinuserid").equals("")) {
 				sql.append(" and  cast(wu.id as char) like '" + params.get("weixinuserid") + "%'");
+			}
+			if (params.get("openid") != null && !params.get("openid").equals("")) {
+				sql.append(" and  wu.openid = '" + params.get("openid") + "'");
 			}
 		}
 		sql.append(" order by orders.orderid");
