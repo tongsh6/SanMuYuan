@@ -5,6 +5,7 @@
 	padding: 10px;
 	border-radius: 4px;
 	border: 1px solid #ccc;
+	z-index: 1;
 }
 
 .bg {

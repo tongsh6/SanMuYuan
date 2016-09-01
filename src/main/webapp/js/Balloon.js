@@ -24,9 +24,6 @@
 				Show();
 			}
 			function InitDom() {
-				$mask = $('<div id="maskBalloon" ></div>');
-				$mask.appendTo($('body'));
-				;
 				$box = $('#' + options.id);
 				if ($box.length < 1) {
 					$box = $('<div id="' + options.id + '" class="' + options.id + '">');
@@ -127,7 +124,6 @@
 			;
 			function Show() {
 				InitPosition();
-				ShowMaskBalloon();
 				$box.show();
 				$box.animate({
 					top : ($(window).height() - options.height) / 2
@@ -146,16 +142,6 @@
 				}, 500, '', function() {
 					$(this).remove();
 				});
-				HideMaskBalloon
-			}
-			function ShowMaskBalloon() {
-				$("#maskBalloon").css("height", $(document).height());
-				$("#maskBalloon").css("width", $(document).width());
-				$("#maskBalloon").show();
-			}
-			;
-			function HideMaskBalloon() {
-				$("#maskBalloon").remove();
 			}
 		}
 	});

@@ -62,7 +62,7 @@ function addPlanPage(data) {
 	strHtml += '<label>产品编号</label> <input type="text" id="productview" class="form-control" readonly>';
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
-	strHtml += '<label>配送日期</label> <input type="text" name="distributionPlan.plandate" value="" class="datepicker form-control">';
+	strHtml += '<label>配送日期</label> <input type="text" id="plandate" name="distributionPlan.plandate" value="" class="datepicker form-control">';
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
 	strHtml += '<div id="divdetails">';
@@ -71,7 +71,7 @@ function addPlanPage(data) {
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
 	strHtml += '<label>配送状态</label>';
-	strHtml += '<select name="distributionPlan.planstate" class="form-control">';
+	strHtml += '<select id="planstate" name="distributionPlan.planstate" class="form-control">';
 	strHtml += '<option value="1">未配送</option>';
 	strHtml += '<option value="2">已配送</option>';
 	strHtml += '</select>';
@@ -129,7 +129,7 @@ function editPlanCallBack(data) {
 		strHtml += '<label>产品编号</label> <input type="text" id="productview" value="' + data.productid + '" class="form-control" readonly>';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
-		strHtml += '<label>配送日期</label> <input type="text" name="distributionPlan.plandate" value="' + data.plandate + '" class="datepicker form-control">';
+		strHtml += '<label>配送日期</label> <input type="text" id="plandate" name="distributionPlan.plandate" value="' + data.plandate + '" class="datepicker form-control">';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
 		strHtml += '<div">';
@@ -175,7 +175,7 @@ function editPlanCallBack(data) {
 		$("#planCancelBtn").click(Cancel);
 		showMask();
 		ShowEditDiv("#editdiv");
-		
+
 		$(".datepicker").datepicker({
 			language : "zh-CN",
 			autoclose : true,// 选中之后自动隐藏日期选择框
@@ -237,10 +237,10 @@ function dbclickOrderCallBack(tr) {
 				var strHtml = "";
 				for (i = 0; i < items.length; i++) {
 					strHtml += '<td width="5%" align="center">' + items[i].cname + '</td>';
-					strHtml += '<td width="3%"><a href="javascript:void(0);" onclick=minus("#itemnumber' + i + '")><i class="fa fa-minus-square-o"></i></a>';
-					strHtml += '<input type="hidden" name="planItem.cid" value="' + items[i].cid + '"></td>';
+					strHtml += '<td width="3%"><a href="javascript:void(0);" id="minus' + i + '" onclick=minus("#itemnumber' + i + '")><i class="fa fa-minus-square-o"></i></a>';
+					strHtml += '<input type="hidden" id="" name="planItem.cid" value="' + items[i].cid + '"></td>';
 					strHtml += '<td align="center" width="8%"><input type="text" id="itemnumber' + i + '" name="planItem.itemnumber" value="' + items[i].itemnumber + '" class="form-control" style="text-align: center;"></td>';
-					strHtml += '<td width="3%" align="right"><a href="javascript:void(0);" onclick=plus("#itemnumber' + i + '")><i class="fa fa-plus-square-o"></i></a></td>';
+					strHtml += '<td width="3%" align="right"><a href="javascript:void(0);" id="plus' + i + '" onclick=plus("#itemnumber' + i + '")><i class="fa fa-plus-square-o"></i></a></td>';
 					if (i < items.length - 1) {
 						strHtml += '<td width="10%"></i></td>';
 					}
