@@ -4,6 +4,7 @@
 function showOrdersListPage(data) {
 	var str = "<div class='panel-heading no-collapse' style='height:50px;'>" + "<div style='float:left;'><h5>" + _menuname + "</h5></div>";
 	str += "<div style='float:right;'><button id='addorderpagebtn' class='btn btn-danger'><i class='fa fa-plus'></i>&nbsp;新增</button></div>";
+	str += "<div style='float:right;padding-right: 5px;'><button id='addviporderpagebtn' class='btn btn-danger'><i class='fa fa-plus'></i>&nbsp;新增会员卡订单</button></div>";
 	str += "</div>";
 	str += "<table id='ordertable' class='table table-responsive table-condensed table-bordered table-striped'>";
 	str += "<thead>";
@@ -37,9 +38,39 @@ function showOrdersListPage(data) {
 	str += "</table>";
 	$("#mainpanel").html(str);
 	$("#addorderpagebtn").click(addOrdersPage);
+	$("#addviporderpagebtn").click(addVipCardOrdersPage);
 	hideCapion();
 }
 var addCountNum = 0;
+/**
+ * 添加会员卡订单
+ */
+function addVipCardOrdersPage() {
+	if (addCountNum > 0) {
+		alert("请先保存！");
+		return;
+	}
+	var str = "";
+	str += "<tr>";
+	str += "<td>" + '<input type="text" id="orderid" value="' + "" + '" class="form-control" readonly> ' + "</td>";
+	str += '<td><input type="text" id="openid" class="form-control" value="请填写卡号"></td>';
+	str += "<td><input type='hidden' id='productid'/>" + '<input type="text" id="productview" value="" class="form-control" readonly >' + "</td>";
+	str += "<td>" + '<input type="number" id="price" value="' + "" + '" class="form-control" style="text-align:right;"> ' + "</td>";
+	str += "<td>" + '<textarea id="remark" value="' + "" + '" class="form-control"/> ' + "</td>";
+	str += "<td align='center'><a href='javascript:void(0);' title='保存' id='saveorderpagebtn'><i class='fa fa-save'></i></a>&nbsp;&nbsp;";
+	str += "<a href='javascript:void(0);' title='取消' id='undobtn'><i class='fa fa-undo'></i></a></td>";
+	str += "</tr>";
+
+	addTr("ordertable", 0, str);
+	$("#saveorderpagebtn").click(function() {
+		operOrder("save");
+	});
+	$("#undobtn").click(unDoOrder);
+	$("#productview").click(function() {
+		showProductList();
+	});
+	addCountNum++;
+}
 function addOrdersPage() {
 	if (addCountNum > 0) {
 		alert("请先保存！");

@@ -19,7 +19,7 @@ public class Orders extends BaseOrders<Orders> {
 
 	public List<Orders> list() {
 		StringBuffer sql = new StringBuffer();
-		sql.append("select orderid,wu.id,productid, FORMAT(o.price,2)price,ifnull(o.remark,'')remark");
+		sql.append("select orderid,ifnull(wu.id,'卡号：'||o.openid)id,productid, FORMAT(o.price,2)price,ifnull(o.remark,'')remark");
 		sql.append(" from ORDERS o");
 		sql.append(" left join WEIXIN_USER wu on wu.openid=o.openid");
 		sql.append(" ORDER by o.orderid desc");
@@ -28,7 +28,7 @@ public class Orders extends BaseOrders<Orders> {
 
 	public Orders info(String strOrderid) {
 		StringBuffer sql = new StringBuffer();
-		sql.append("select orderid,o.openid,wu.nickname,wu.id,o.productid,p.productname, FORMAT(o.price,2)price,ifnull(o.remark,'')remark");
+		sql.append("select orderid,o.openid,ifnull(wu.nickname,'')nickname,ifnull(wu.id,'卡号：'||o.openid)id,o.productid,p.productname, FORMAT(o.price,2)price,ifnull(o.remark,'')remark");
 		sql.append(" from ORDERS o");
 		sql.append(" left join WEIXIN_USER wu on wu.openid=o.openid");
 		sql.append(" left join product p on o.productid=p.productid");
@@ -57,7 +57,7 @@ public class Orders extends BaseOrders<Orders> {
 	}
 
 	public Page<Orders> paginate(int pageNumber, int pageSize) {
-		String select = "select orderid,wu.id,productid, FORMAT(o.price,2)price,ifnull(o.remark,'')remark";
+		String select = "select orderid,ifnull(wu.id,'卡号：'||o.openid)id,productid, FORMAT(o.price,2)price,ifnull(o.remark,'')remark";
 
 		String sqlExceptSelect = " from ORDERS o left join WEIXIN_USER wu on wu.openid=o.openid  ORDER by o.orderid ";
 
@@ -66,7 +66,7 @@ public class Orders extends BaseOrders<Orders> {
 
 	public List<Orders> query(Map<String, String> params) {
 		StringBuffer sql = new StringBuffer();
-		sql.append("select orders.orderid,wu.id weixinid,wu.nickname,orders.productid,p.productname,FORMAT(orders.price,2)price,p.cycle,d.detail,dp.adetail,");
+		sql.append("select orders.orderid,ifnull(wu.id,'卡号：'||orders.openid) weixinid,ifnull(wu.nickname,'')nickname,orders.productid,p.productname,FORMAT(orders.price,2)price,p.cycle,d.detail,dp.adetail,");
 		sql.append("	DATE_FORMAT(datet.nextdate,'%Y-%m-%d')nextdate,");
 		sql.append("	(case when sdatet.plinum=0 then '未开始配送' when sdatet.plinum>0 and sdatet.plinum<sdatet.pinum then '部分已配送'");
 		sql.append("	 when sdatet.plinum>=sdatet.pinum  then '全部已配送' end )state");
@@ -129,9 +129,18 @@ public class Orders extends BaseOrders<Orders> {
 			if (params.get("openid") != null && !params.get("openid").equals("")) {
 				sql.append(" and  wu.openid = '" + params.get("openid") + "'");
 			}
+			if (params.get("cardno") != null && !params.get("cardno").equals("")) {
+				sql.append(" and  wu.openid = '卡号：" + params.get("cardno") + "'");
+			}
 		}
 		sql.append(" order by orders.orderid");
 		return find(sql.toString());
+	}
+
+	public boolean receive(String cardno, String openid) {
+		int ret = Db.update("update orders set openid=? where openid=?", openid, cardno);
+
+		return ret > 0 ? true : false;
 	}
 
 }

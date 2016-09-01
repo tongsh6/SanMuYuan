@@ -19,4 +19,6 @@ public interface WeiXinUserService {
 
 	WeixinUser infoByCode(String strcode);
 
+	String getOpenId(String strcode);
+
 }

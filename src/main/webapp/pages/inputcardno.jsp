@@ -1,10 +1,9 @@
-<%@page import="com.nstc.sanmuyuan.message.ResultMessage"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>操作结果</title>
+<title>输入卡号</title>
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="../lib/bootstrap/css/bootstrap.css">
@@ -23,12 +22,17 @@
 		</div>
 	</div>
 	<%
-		ResultMessage message = (ResultMessage) request.getAttribute("message");
+		String openid = (String) request.getAttribute("openid");
 	%>
 	<div class="dialog">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<span><%=message.getResultMsg()%></span>
+				<form method="post" action="receive">
+					<div class="form-group">
+						<label>卡号</label> <input type="text" name="cardno" class="form-control span12"> <input type="hidden" name="openid" value="<%=openid%>">
+					</div>
+					<button class="btn btn-primary pull-right">领取</button>
+				</form>
 			</div>
 		</div>
 	</div>

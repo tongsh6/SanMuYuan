@@ -53,19 +53,7 @@ public class WeixinController extends Controller {
 	}
 
 	@Clear(AuthInterceptor.class)
-	public void infopagetemp() {
-
-		String strOpenid = getPara("openid");
-
-		weiXinUserService = new WeiXinUserServiceImpl();
-
-		WeixinUser weixinUser = weiXinUserService.info(strOpenid);
-		setAttr("weixinuserinfo", weixinUser);
-		renderJsp("/pages/weixinuserinfo.jsp");
-	}
-
-	@Clear(AuthInterceptor.class)
-	public void infopage() {
+	public void mobileinfo() {
 		String strcode = getPara("code");
 		if (strcode == null || strcode.trim().equals("")) {
 			log.error("未获取到有效strcode,code为空或是空字符串!");
@@ -121,26 +109,8 @@ public class WeixinController extends Controller {
 		}
 	}
 
-	public void page() {
-		renderJson("weixinuserpage", WeixinUser.dao.paginate(getParaToInt(0, 1), 6));
-	}
-
 	@Clear(AuthInterceptor.class)
-	public void orderlistpage() {
-		String openid = getPara("openid");
-		if (openid == null || openid.trim().equals("")) {
-			log.error("未获取到有效openid,openid为空或是空字符串!");
-			renderJson("未获取到有效openid,openid为空或是空字符串!");
-		} else {
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("openid", openid);
-			setAttr("orderlist", Orders.dao.query(params));
-			renderJsp("/pages/orderlist.jsp");
-		}
-	}
-
-	@Clear(AuthInterceptor.class)
-	public void orders() {
+	public void orderlist() {
 		String strcode = getPara("code");
 		if (strcode == null || strcode.trim().equals("")) {
 			log.error("未获取到有效strcode,code为空或是空字符串!");
@@ -152,5 +122,51 @@ public class WeixinController extends Controller {
 			setAttr("orderlist", orders);
 			renderJsp("/pages/orderlist.jsp");
 		}
+	}
+
+	@Clear(AuthInterceptor.class)
+	public void input() {
+		String strcode = getPara("code");
+		if (strcode == null || strcode.trim().equals("")) {
+			log.error("未获取到有效strcode,code为空或是空字符串!");
+			renderJson("未获取到有效strcode,code为空或是空字符串!");
+		} else {
+			weiXinUserService = new WeiXinUserServiceImpl();
+			String openid = weiXinUserService.getOpenId(strcode);
+
+			setAttr("openid", openid);
+			renderJsp("/pages/inputcardno.jsp");
+		}
+	}
+
+	@Clear(AuthInterceptor.class)
+	public void receive() {
+		String cardno = getPara("cardno");
+		String openid = getPara("openid");
+		if (cardno == null || cardno.trim().equals("") || openid == null || openid.trim().equals("")) {
+			log.error("未获取到有效cardno、openid,cardno、openid为空或是空字符串!");
+			ResultMessage message = new ResultMessage();
+			message.setResultMsg("未获取到有效卡号,卡号为空或是空字符串!");
+			setAttr("message", message);
+			renderJsp("/pages/message.jsp");
+		} else {
+
+			boolean reslut = Orders.dao.receive(cardno, openid);
+			if (reslut) {
+				Map<String, String> params = new HashMap<String, String>();
+				params.put("cardno", cardno);
+				setAttr("orderlist", Orders.dao.query(params));
+				renderJsp("/pages/orderlist.jsp");
+			} else {
+				ResultMessage message = new ResultMessage();
+				message.setResultMsg("卡号：" + cardno + "，领取失败！");
+				setAttr("message", message);
+				renderJsp("/pages/message.jsp");
+			}
+		}
+	}
+
+	public void page() {
+		renderJson("weixinuserpage", WeixinUser.dao.paginate(getParaToInt(0, 1), 6));
 	}
 }

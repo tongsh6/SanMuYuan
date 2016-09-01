@@ -216,7 +216,7 @@ public class WeiXinUserServiceImpl implements WeiXinUserService {
 
 	}
 
-	private String getOpenId(String strcode) {
+	public String getOpenId(String strcode) {
 		String appId = PropKit.get("AppID");
 		String secret = PropKit.get("AppSecret");
 		// 通过code换取网页授权access_token
