@@ -8,5 +8,10 @@ Token：2a66961c2cd9ea5a042d
 EncodingAESKey：sdLUJxFqt9sM0OOx0jSLiUxQGJFOfEKwBjBQc5Jv2Jx
 
 
-
-https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8d3707eabfe6ecda&redirect_uri=http://bisvr.chinacloudapp.cn/sanmuyuan/weixin/orderlist&response_type=code&scope=snsapi_base&state=type
+菜单：
+我的订单
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8d3707eabfe6ecda&redirect_uri=http://bisvr.chinacloudapp.cn/weixin/orderlist&response_type=code&scope=snsapi_base&state=type
+我的信息
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8d3707eabfe6ecda&redirect_uri=http://bisvr.chinacloudapp.cn/weixin/mobileinfo&response_type=code&scope=snsapi_base&state=type
+领取礼品
+https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8d3707eabfe6ecda&redirect_uri=http://bisvr.chinacloudapp.cn/weixin/input&response_type=code&scope=snsapi_base&state=type
