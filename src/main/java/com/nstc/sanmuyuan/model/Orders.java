@@ -95,7 +95,7 @@ public class Orders extends BaseOrders<Orders> {
 		sql.append("					 	when '月' then date_add(ifnull(max(dp.plandate),od.createdate), interval 1 month)");
 		sql.append("					 	when '年' then date_add(ifnull(max(dp.plandate),od.createdate), interval 1 year) end )nextdate	");
 		sql.append("					 from orders od");
-		sql.append("					 left join distribution_plan dp on od.orderid=dp.orderid");
+		sql.append("					 left join distribution_plan dp on od.orderid=dp.orderid and dp.planstate='2'");
 		sql.append("					 left join product p on p.productid = od.productid");
 		sql.append("					 group by od.orderid) datet on orders.orderid=datet.orderid");
 		sql.append("	 left join (select o.orderid,sum(pi.itemnumber)pinum,sum(ifnull(pli.aNum,0))plinum");
