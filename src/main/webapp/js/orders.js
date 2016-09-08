@@ -67,7 +67,7 @@ function addVipCardOrdersPage() {
 	});
 	$("#undobtn").click(unDoOrder);
 	$("#productview").click(function() {
-		showProductList();
+		showProductListPanel();
 	});
 	addCountNum++;
 }
@@ -94,10 +94,10 @@ function addOrdersPage() {
 	$("#undobtn").click(unDoOrder);
 
 	$("#weixinuserid").click(function() {
-		showWeixinUserList();
+		showWeixinUserListPanel();
 	});
 	$("#productview").click(function() {
-		showProductList();
+		showProductListPanel();
 	});
 	addCountNum++;
 }
@@ -125,10 +125,10 @@ function editOrder(tr) {
 				operOrder("update");
 			});
 			$("#weixinuserid").click(function() {
-				showWeixinUserList();
+				showWeixinUserListPanel();
 			});
 			$("#productview").click(function() {
-				showProductList();
+				showProductListPanel();
 			});
 		})
 	}
@@ -136,7 +136,7 @@ function editOrder(tr) {
 }
 
 function unDoOrder() {
-	jsonAjax("get", "orders/list", showOrdersListPage);
+	jsonAjax("get", "orders/list?pagesize=" + _mainpagesize, showOrdersListPage);
 	addCountNum = 0;
 }
 
@@ -147,8 +147,8 @@ function unEditOrder(tr) {
 	} else {
 		jsonAjax("get", "orders/info?orderid=" + orderid, function(data) {
 			tr.cells[0].innerHTML = '<input type="text" id="orderid" value="' + orderid + '" class="form-control" readonly>';
-			tr.cells[1].innerHTML = '<input type="hidden" id="openid" value="' + data.openid + '"/><input type="text" id="weixinuserid" value="' + data.id + '(' + data.nickname + ')' + '" class="form-control" readonly onclick="showWeixinUserList();"> ';
-			tr.cells[2].innerHTML = '<input type="hidden" id="productid" value="' + data.productid + '"/><input type="text" id="productview" value="' + data.productid + '(' + data.productname + ')' + '" class="form-control" readonly onclick="showProductList();" >';
+			tr.cells[1].innerHTML = '<input type="hidden" id="openid" value="' + data.openid + '"/><input type="text" id="weixinuserid" value="' + data.id + '(' + data.nickname + ')' + '" class="form-control" readonly onclick="showWeixinUserListPanel();"> ';
+			tr.cells[2].innerHTML = '<input type="hidden" id="productid" value="' + data.productid + '"/><input type="text" id="productview" value="' + data.productid + '(' + data.productname + ')' + '" class="form-control" readonly onclick="showProductListPanel();" >';
 			tr.cells[3].innerHTML = '<input type="number" id="price" value="' + data.price + '" class="form-control" style="text-align:right;"> ';
 			tr.cells[4].innerHTML = '<textarea id="remark" value="' + data.remark + '" class="form-control"/> ';
 			tr.cells[5].innerHTML = '<button id="saveorderpagebtn" class="btn btn-danger"><i class="fa fa-save"></i></button>';
@@ -192,7 +192,7 @@ function operOrder(oper) {
 			hideCapion();
 			if (data != null) {
 				showCapionMsg(data.resultMsg);
-				jsonAjax("get", "orders/list", showOrdersListPage);
+				jsonAjax("get", "orders/list?pagesize=" + _mainpagesize, showOrdersListPage);
 			} else {
 				showCapionMsg("未知错误！");
 			}
@@ -209,11 +209,100 @@ function delOrder(orderid) {
 			hideCapion();
 			if (data != null) {
 				showCapionMsg(data.resultMsg);
-				jsonAjax("get", "orders/list", showOrdersListPage);
+				jsonAjax("get", "orders/list?pagesize=" + _mainpagesize, showOrdersListPage);
 			} else {
 				showCapionMsg("未知错误！");
 			}
 		});
+	});
+}
+
+/**
+ * 订单选择窗口
+ */
+function showOrderListPanel() {
+	showCapion();
+	var strHtml = '';
+	strHtml += '<input type="hidden"  id="ordertables"/>';
+	strHtml += '<form id="querylistform" class="form-horizontal" style="padding-top: 15px;" role="form">';
+	strHtml += '<div class="form-group">';
+	strHtml += '<label  class="col-sm-2 control-label">订单编号</label>';
+	strHtml += '<div class="col-sm-4">';
+	strHtml += '<input type="text" class="form-control" name="orderid" value="">';
+	strHtml += '</div>';
+	strHtml += '<label class="col-sm-2 control-label">客户昵称</label>';
+	strHtml += '<div class="col-sm-4">';
+	strHtml += '<input type="text" class="form-control" name="nickname" value="">';
+	strHtml += '</div>';
+	strHtml += '</div>';
+	strHtml += '<div class="form-group">';
+	strHtml += '<label class="col-sm-2 control-label">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</label>';
+	strHtml += '<div class="col-sm-4">';
+	strHtml += '<input type="text" class="form-control" name="remark" value="">';
+	strHtml += '</div>';
+	strHtml += '<div class="col-sm-2">';
+	strHtml += '</div>';
+	strHtml += '<div class="col-sm-2">';
+	strHtml += '<input type="button" class="form-control" value="清空" onclick=clearForm("querylistform"); />';
+	strHtml += '</div>';
+	strHtml += '<div class="col-sm-2">';
+	strHtml += '<input type="button" class="form-control" id="querybin" value="查询" onclick=showOrderList(); />';
+	strHtml += '</div>';
+	strHtml += '</div>';
+	strHtml += '</form>';
+
+	strHtml += '<div id="querylistdiv">';
+	strHtml += '<table class="table">';
+	strHtml += '<thead>';
+	strHtml += '<tr>';
+	strHtml += '<th>订单编号</th>';
+	strHtml += '<th>客户编号</th>';
+	strHtml += '<th>产品编号</th>';
+	strHtml += '<th>实际价格</th>';
+	strHtml += '<th>备注</th>';
+	strHtml += '</tr>';
+	strHtml += '</thead>';
+	strHtml += '<tbody>';
+	jsonAjax("get", "orders/page/" + 1 + "?pagesize=" + _pagesize, function(data) {
+		hideCapion();
+		if (data != null) {
+			if (data.orderpage.list != null && data.orderpage.list.length > 0) {
+				var orders = data.orderpage.list;
+
+				var pNum = (parseInt(data.orderpage.pageNumber) - 1);
+				var nNum = (parseInt(data.orderpage.pageNumber) + 1);
+				var strDisabledP = 'onclick=showOrderList("' + pNum + '")';
+				var strDisabledN = ' onclick=showOrderList("' + nNum + '")';
+
+				if (data.orderpage.pageNumber == 1) {
+					strDisabledP = "";
+				}
+				if (data.orderpage.pageNumber == data.orderpage.totalPage) {
+					strDisabledN = "";
+				}
+
+				for (i = 0; i < orders.length; i++) {
+					strHtml += '<tr ondblclick="dbclickOrderCallBack(this);">';
+					strHtml += '<td>' + orders[i].orderid + '</td>';
+					strHtml += '<td>' + orders[i].id + '</td>';
+					strHtml += '<td>' + orders[i].productid + '</td>';
+					strHtml += '<td align="right">' + orders[i].price + '</td>';
+					strHtml += '<td>' + orders[i].remark + '</td>';
+					strHtml += '</tr>';
+				}
+				strHtml += '</tbody>';
+				strHtml += '</table>';
+				strHtml += '<ul class="pager"> ';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledP + '>&larr; 上一页</a></li>&nbsp;';
+				strHtml += '<span>' + data.orderpage.pageNumber + '/' + data.orderpage.totalPage + '&nbsp;&nbsp;总条数：' + data.orderpage.totalRow + ' </span>';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledN + ' >下一页  &rarr;</a></li>';
+				strHtml += '</ul>';
+			}
+		}
+		strHtml += '</div>';
+		$("#listinfo").html(strHtml);
+		ShowListDivCenter("#listdiv");
+		showMask();
 	});
 }
 
@@ -222,15 +311,10 @@ function showOrderList(pagenum) {
 		pagenum = "";
 	}
 
-	closeListPage();
-	showCapion();
-	jsonAjax("get", "orders/page/" + pagenum, function(data) {
-		hideCapion();
+	var formParam = $("#querylistform").serialize();// 序列化表格内容为字符串
+	jsonAjaxForm("get", "orders/page/" + pagenum, formParam, function(data) {
 		if (data != null) {
 			var strHtml = "";
-			strHtml += '<div>';
-			strHtml += '<button id="closelistbtn" type="button" class="close" aria-hidden="true">&times;</button>';
-			strHtml += '</div>';
 			strHtml += '<table class="table">';
 			strHtml += '<thead>';
 			strHtml += '<tr>';
@@ -238,6 +322,7 @@ function showOrderList(pagenum) {
 			strHtml += '<th>客户编号</th>';
 			strHtml += '<th>产品编号</th>';
 			strHtml += '<th>实际价格</th>';
+			strHtml += '<th>备注</th>';
 			strHtml += '</tr>';
 			strHtml += '</thead>';
 			strHtml += '<tbody>';
@@ -262,6 +347,7 @@ function showOrderList(pagenum) {
 					strHtml += '<td>' + orders[i].id + '</td>';
 					strHtml += '<td>' + orders[i].productid + '</td>';
 					strHtml += '<td align="right">' + orders[i].price + '</td>';
+					strHtml += '<td>' + orders[i].remark + '</td>';
 					strHtml += '</tr>';
 				}
 				strHtml += '</tbody>';
@@ -272,9 +358,7 @@ function showOrderList(pagenum) {
 				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledN + ' >下一页  &rarr;</a></li>';
 				strHtml += '</ul>';
 			}
-			$("#listinfo").html(strHtml);
-			$("#closelistbtn").click(closeListPage);
-			showCapionByDivId("#listdiv");
+			$("#querylistdiv").html(strHtml);
 		} else {
 			showCapionMsg("未知错误！");
 		}

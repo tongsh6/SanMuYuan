@@ -5,8 +5,8 @@ function showPlansListPage(data) {
 	str += "<table id='ordertable' class='table table-responsive table-condensed table-bordered table-striped'>";
 	str += "<thead>";
 	str += "<tr>";
-	str += "<th>配送编号</th>";
 	str += "<th>订单编号</th>";
+	str += "<th>配送编号</th>";
 	str += "<th>产品编号</th>";
 	str += "<th>产品名称</th>";
 	str += "<th>配送日期</th>";
@@ -20,19 +20,32 @@ function showPlansListPage(data) {
 	str += "<tbody>";
 
 	if (data != null && data.length > 0) {
-		for (i = 0; i < data.length; i++) {
+		var orderids = new Array();
+		for (var i = 0; i < data.length; i++) {
+			orderids.push(data[i].orderid);
+		}
+		orderids = orderids.unique();
+
+		for (var i = 0; i < orderids.length; i++) {
 			str += "<tr>";
-			str += "<td>" + data[i].planid + "</td>";
-			str += "<td>" + data[i].orderid + "</td>";
-			str += "<td>" + data[i].productid + "</td>";
-			str += "<td>" + data[i].productname + "</td>";
-			str += "<td>" + data[i].plandate + "</td>";
-			str += "<td>" + data[i].detail + "</td>";
-			str += "<td>" + data[i].planstate + "</td>";
-			str += "<td>" + data[i].remark + "</td>";
-			str += "<td align='center'><a href='javascript:void(0);' onclick=editPlan('" + data[i].planid + "')><i class='fa fa-pencil'></i></a>&nbsp;&nbsp;";
-			str += "<a role='button' data-toggle='modal' href='javascript:void(0);' onclick=delPlan('" + data[i].planid + "')><i class='fa fa-trash-o'></i></a></td>";
+			str += "<td colspan='9'>" + orderids[i] + "</td>";
 			str += "</tr>";
+			for (var k = 0; k < data.length; k++) {
+				if (orderids[i] == data[k].orderid) {
+					str += "<tr>";
+					str += "<td></td>";
+					str += "<td>" + data[k].planid + "</td>";
+					str += "<td>" + data[k].productid + "</td>";
+					str += "<td>" + data[k].productname + "</td>";
+					str += "<td>" + data[k].plandate + "</td>";
+					str += "<td>" + data[k].detail + "</td>";
+					str += "<td>" + data[k].planstate + "</td>";
+					str += "<td>" + data[k].remark + "</td>";
+					str += "<td align='center'><a href='javascript:void(0);' onclick=editPlan('" + data[k].planid + "')><i class='fa fa-pencil'></i></a>&nbsp;&nbsp;";
+					str += "<a role='button' data-toggle='modal' href='javascript:void(0);' onclick=delPlan('" + data[k].planid + "')><i class='fa fa-trash-o'></i></a></td>";
+					str += "</tr>";
+				}
+			}
 		}
 	}
 	str += "</tbody>";
@@ -55,7 +68,7 @@ function addPlanPage(data) {
 	strHtml += '<label>配送编号</label> <input type="text" name="distributionPlan.planid" value="" class="form-control" readonly>';
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
-	strHtml += '<label>订单编号</label> <input type="text" id="orderid" name="distributionPlan.orderid" value="" class="form-control" readonly onclick="showOrderList();">';
+	strHtml += '<label>订单编号</label> <input type="text" id="orderid" name="distributionPlan.orderid" value="" class="form-control" readonly onclick="showOrderListPanel();">';
 	strHtml += '</div>';
 	strHtml += '<div class="form-group">';
 	strHtml += '<input type="hidden" id="productid" name="distributionPlan.productid">';
@@ -122,7 +135,7 @@ function editPlanCallBack(data) {
 		strHtml += '<label>配送编号</label> <input type="text" name="distributionPlan.planid" value="' + data.planid + '" class="form-control" readonly>';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
-		strHtml += '<label>订单编号</label> <input type="text" id="orderid" name="distributionPlan.orderid" value="' + data.orderid + '" class="form-control" readonly onclick="showOrderList();">';
+		strHtml += '<label>订单编号</label> <input type="text" id="orderid" name="distributionPlan.orderid" value="' + data.orderid + '" class="form-control" readonly onclick="showOrderListPanel();">';
 		strHtml += '</div>';
 		strHtml += '<div class="form-group">';
 		strHtml += '<input type="hidden" id="productid" name="distributionPlan.productid" value="' + data.productid + '">';
@@ -203,7 +216,7 @@ function planOperCallBack(data) {
 			} else {
 				Cancel();
 				showCapionMsg(data.resultMsg);
-				jsonAjax("get", "plans/list", showPlansListPage);
+				jsonAjax("get", "plans/list?pagesize=" + _mainpagesize, showPlansListPage);
 			}
 		}
 	}
@@ -217,7 +230,7 @@ function delPlan(planid) {
 			hideCapion();
 			if (data != null) {
 				showCapionMsg(data.resultMsg);
-				jsonAjax("get", "plans/list", showPlansListPage);
+				jsonAjax("get", "plans/list?pagesize=" + _mainpagesize, showPlansListPage);
 			} else {
 				showCapionMsg("未知错误！");
 			}

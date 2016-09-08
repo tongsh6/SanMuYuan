@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -42,6 +43,17 @@ public class WeiXinUserServiceImpl implements WeiXinUserService {
 	@Override
 	public boolean update(WeixinUser weixinuser) {
 		return weixinuser.update();
+	}
+
+	@Override
+	public boolean save(WeixinUser weixinuser) {
+		weixinuser.setOpenid(UUID.randomUUID().toString());
+		return weixinuser.save();
+	}
+
+	@Override
+	public boolean del(String strOpenid) {
+		return WeixinUser.dao.deleteById(strOpenid);
 	}
 
 	@Override
@@ -237,4 +249,5 @@ public class WeiXinUserServiceImpl implements WeiXinUserService {
 	public WeixinUser infoByCode(String strcode) {
 		return WeixinUser.dao.findById(getOpenId(strcode));
 	}
+
 }

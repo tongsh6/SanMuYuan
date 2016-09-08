@@ -6,10 +6,11 @@
 <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-datepicker.min.css"/>
+<link rel="stylesheet" type="text/css" href="lib/bootstrap/css/bootstrap-datepicker.min.css" />
 <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.css">
 <link rel="stylesheet" href="css/Balloon.css">
-<script src="js/respond.js" type="text/javascript"></script><!-- 用来兼容ie8，ie8对bootstrap的栅格不支持 -->
+<script src="js/respond.js" type="text/javascript"></script>
+<!-- 用来兼容ie8，ie8对bootstrap的栅格不支持 -->
 <script src="lib/jquery-1.11.1.min.js" type="text/javascript"></script>
 <script src="lib/jQuery-Knob/js/jquery.knob.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -93,13 +94,15 @@ th {
 }
 
 .shade-list {
+	top: 10px;
 	position: absolute;
 	z-index: 1003;
-	width: 45%;
+	width: 50%;
 	height: 45%;
 	/* 	text-align: left; */
 	background-color: #DBE5F1;
 	display: table;
+	position: absolute;
 }
 
 .mask {
@@ -121,13 +124,13 @@ th {
 	<!-- Le fav and touch icons -->
 	<link rel="shortcut icon" href="assets/ico/favicon.ico">
 
-		<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
-		<!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
-		<!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
-		<!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
-		<!--[if (gt IE 9)|!(IE)]><!-->
+	<!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+	<!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
+	<!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
+	<!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
+	<!--[if (gt IE 9)|!(IE)]><!-->
 
-		<!--<![endif]-->
+	<!--<![endif]-->
 	<div id="mask" class="mask"></div>
 	<div class="navbar navbar-default" role="navigation">
 		<div class="navbar-header">
@@ -185,6 +188,9 @@ th {
 	<div id="listdiv" class="shade-list">
 		<div class="Table-Cell">
 			<div id="listinfo" class="Center-Block"></div>
+		</div>
+		<div style="padding-top: 0px;padding-right: 5px;">
+			<button id="closelistbtn" class="close" aria-hidden="true" onclick="closeListPage();">&times;</button>
 		</div>
 	</div>
 	<DIV id="cfm"></DIV>

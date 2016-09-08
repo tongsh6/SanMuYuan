@@ -2,7 +2,7 @@
  * 全局变量
  */
 var _menuname = "";
-var _pagesize = 6;
+var _pagesize = 10;
 var _mainpagesize = 15;
 
 /**

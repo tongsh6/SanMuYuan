@@ -21,4 +21,8 @@ public interface WeiXinUserService {
 
 	String getOpenId(String strcode);
 
+	boolean save(WeixinUser model);
+
+	boolean del(String strOpenid);
+
 }

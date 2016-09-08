@@ -2,6 +2,7 @@ package com.nstc.sanmuyuan.model;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Db;
@@ -49,7 +50,26 @@ public class WeixinUser extends BaseWeixinUser<WeixinUser> {
 		}
 	}
 
-	public Page<WeixinUser> paginate(int pageNumber, int pageSize) {
-		return paginate(pageNumber, pageSize, "select id,openid,nickname, ifnull(phoneno,'')phoneno,ifnull(addressed,'')addressed", "from WEIXIN_USER order by id asc");
+	public Page<WeixinUser> paginate(Map<String, String> params, int pageNumber, int pageSize) {
+
+		String strSelect = "select id,openid,nickname, ifnull(remark,'')remark, ifnull(phoneno,'')phoneno,ifnull(addressed,'')addressed";
+
+		String sqlExceptSelect = "from WEIXIN_USER ";
+		sqlExceptSelect += " where 1=1 ";
+		if (params != null && params.size() > 0) {
+			if (params.get("weixinuserid") != null && !params.get("weixinuserid").equals("")) {
+				sqlExceptSelect += " and id like '%" + params.get("weixinuserid") + "%'";
+			}
+			if (params.get("nickname") != null && !params.get("nickname").equals("")) {
+				sqlExceptSelect += " and nickname like '%" + params.get("nickname") + "%'";
+			}
+			if (params.get("remark") != null && !params.get("remark").equals("")) {
+				sqlExceptSelect += " and remark like '%" + params.get("remark") + "%'";
+			}
+
+		}
+		sqlExceptSelect += "order by id asc";
+
+		return paginate(pageNumber, pageSize, strSelect, sqlExceptSelect);
 	}
 }

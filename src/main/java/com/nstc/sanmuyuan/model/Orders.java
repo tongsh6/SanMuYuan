@@ -56,10 +56,24 @@ public class Orders extends BaseOrders<Orders> {
 		}
 	}
 
-	public Page<Orders> paginate(int pageNumber, int pageSize) {
+	public Page<Orders> paginate(Map<String, String> params, int pageNumber, int pageSize) {
 		String select = "select orderid,ifnull(wu.id,'卡号：'||o.openid)id,productid, FORMAT(o.price,2)price,ifnull(o.remark,'')remark";
 
-		String sqlExceptSelect = " from ORDERS o left join WEIXIN_USER wu on wu.openid=o.openid  ORDER by o.orderid ";
+		String sqlExceptSelect = " from ORDERS o left join WEIXIN_USER wu on wu.openid=o.openid";
+		sqlExceptSelect += " where 1=1 ";
+		if (params != null && params.size() > 0) {
+			if (params.get("orderid") != null && !params.get("orderid").equals("")) {
+				sqlExceptSelect += " and orderid like '%" + params.get("orderid") + "%'";
+			}
+			if (params.get("remark") != null && !params.get("remark").equals("")) {
+				sqlExceptSelect += " and o.remark like '%" + params.get("remark") + "%'";
+			}
+			if (params.get("nickname") != null && !params.get("nickname").equals("")) {
+				sqlExceptSelect += " and wu.nickname like '%" + params.get("nickname") + "%'";
+			}
+
+		}
+		sqlExceptSelect += " ORDER by o.orderid ";
 
 		return paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}

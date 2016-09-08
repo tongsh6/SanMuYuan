@@ -81,7 +81,7 @@ function showQueryListPage() {
 function query() {
 	var formParam = $("#queryform").serialize();// 序列化表格内容为字符串
 
-	jsonAjaxForm("post", "query/list", formParam, queryCallBack);
+	jsonAjaxForm("post", "query/list/1?pagesize=" + _mainpagesize, formParam, queryCallBack);
 }
 
 function queryCallBack(data) {

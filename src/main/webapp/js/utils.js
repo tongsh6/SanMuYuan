@@ -1,6 +1,14 @@
 /**
  * utils
  */
+
+/**
+ * 清空form
+ */
+function clearForm(formid) {
+	$(':input', '#' + formid).not(':button, :submit, :reset, :hidden').val('').removeAttr('checked').removeAttr('selected');
+}
+
 /**
  * 为table指定行添加一行
  * 
@@ -20,8 +28,14 @@ function addTr(tab, row, trHtml) {
 }
 
 function closeListPage() {
-	$("#listinfo").html("");
-	hideCapionByDivId("#listdiv");
+	var obj = document.getElementById("ordertables");
+	if (obj == null) {
+		$("#listinfo").html("");
+		hideCapionByDivId("#listdiv");
+	} else {
+		$("#listinfo").html("")
+		hideDiv("#listdiv");
+	}
 }
 
 function showCfm(msg, callbackfun) {
@@ -61,6 +75,12 @@ function Cancel() {
 }
 
 // 兼容火狐、IE8
+function showDMask() {
+	$("#mask").css("height", $(document).height());
+	$("#mask").css("width", $(document).width());
+	$("#mask").css("z-index", 1003);
+	$("#mask").show();
+}
 function showMask() {
 	$("#mask").css("height", $(document).height());
 	$("#mask").css("width", $(document).width());
@@ -71,6 +91,19 @@ function hideMask() {
 	$("#mask").css("width", 0);
 	$("#mask").hide();
 }
+// 让指定的DIV始终显示在屏幕正中间
+function ShowListDivCenter(divName) {
+	var top = ($(window).height() - $(divName).height()) / 2;
+	var left = ($(window).width() - $(divName).width()) / 2;
+	var scrollTop = $(document).scrollTop();
+	var scrollLeft = $(document).scrollLeft();
+	$(divName).css({
+		position : 'absolute',
+		'top' : top + scrollTop - 150,
+		left : left + scrollLeft
+	}).show();
+}
+
 // 让指定的DIV始终显示在屏幕正中间
 function ShowDivCenter(divName) {
 	var top = ($(window).height() - $(divName).height()) / 2;
@@ -99,6 +132,11 @@ function hideDiv(divName) {
 	$(divName).hide();
 }
 
+function showListCapionByDivId(divId) {
+	showMask();
+	ShowListDivCenter(divId);
+}
+
 function showCapionByDivId(divId) {
 	showMask();
 	ShowDivCenter(divId);
@@ -109,6 +147,11 @@ function hideCapionByDivId(divId) {
 }
 
 function showCapion() {
+	var divName = "#shade";
+	showMask();
+	ShowDivCenter(divName);
+}
+function showDCapion() {
 	var divName = "#shade";
 	showMask();
 	ShowDivCenter(divName);
@@ -181,4 +224,15 @@ function jsonAjaxForm(type, url, data, callback) {
 			})
 		}
 	});
+}
+
+Array.prototype.unique = function() {
+	this.sort();
+	var re = [ this[0] ];
+	for (var i = 1; i < this.length; i++) {
+		if (this[i] !== re[re.length - 1]) {
+			re.push(this[i]);
+		}
+	}
+	return re;
 }

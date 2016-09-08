@@ -27,7 +27,7 @@ function showProductListPage(data) {
 			str += "<td>" + data[i].productname + "</td>";
 			str += "<td align='center'>" + data[i].cycle + "</td>";
 			str += "<td align='right'>" + data[i].price + "</td>";
-			str += "<td align='center'>" + data[i].details + "</td>";
+			str += "<td align='left'>" + data[i].details + "</td>";
 			str += "<td>" + data[i].remark + "</td>";
 			str += "<td align='center'><a href='javascript:void(0);' onclick=editProduct('" + data[i].productid + "')><i class='fa fa-pencil'></i></a>&nbsp;&nbsp;";
 			str += "<a role='button' data-toggle='modal' href='javascript:void(0);' onclick=delProduct('" + data[i].productid + "')><i class='fa fa-trash-o'></i></a></td>";
@@ -118,7 +118,7 @@ function delProduct(productid) {
 			hideCapion();
 			if (data != null) {
 				showCapionMsg(data.resultMsg);
-				jsonAjax("get", "product/list", showProductListPage);
+				jsonAjax("get", "product/list?pagesize=" + _mainpagesize, showProductListPage);
 			} else {
 				showCapionMsg("未知错误！");
 			}
@@ -219,10 +219,101 @@ function productOperCallBack(data) {
 			} else {
 				Cancel();
 				showCapionMsg(data.resultMsg);
-				jsonAjax("get", "product/list", showProductListPage);
+				jsonAjax("get", "product/list?pagesize=" + _mainpagesize, showProductListPage);
 			}
 		}
 	}
+}
+
+/**
+ * 产品选择窗口
+ */
+function showProductListPanel() {
+	showCapion();
+	var strHtml = '';
+	strHtml += '<form id="querylistform" class="form-horizontal" style="padding-top: 15px;" role="form">';
+	strHtml += '<div class="form-group">';
+	strHtml += '<label  class="col-sm-2 control-label">产品编号</label>';
+	strHtml += '<div class="col-sm-4">';
+	strHtml += '<input type="text" class="form-control" name="productid" value="">';
+	strHtml += '</div>';
+	strHtml += '<label class="col-sm-2 control-label">产品名称</label>';
+	strHtml += '<div class="col-sm-4">';
+	strHtml += '<input type="text" class="form-control" name="productname" value="">';
+	strHtml += '</div>';
+	strHtml += '</div>';
+	strHtml += '<div class="form-group">';
+	strHtml += '<label class="col-sm-2 control-label">备&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;注</label>';
+	strHtml += '<div class="col-sm-4">';
+	strHtml += '<input type="text" class="form-control" name="remark" value="">';
+	strHtml += '</div>';
+	strHtml += '<div class="col-sm-2">';
+	strHtml += '</div>';
+	strHtml += '<div class="col-sm-2">';
+	strHtml += '<input type="button" class="form-control" value="清空" onclick=clearForm("querylistform"); />';
+	strHtml += '</div>';
+	strHtml += '<div class="col-sm-2">';
+	strHtml += '<input type="button" class="form-control" id="querybin" value="查询" onclick=showProductList(); />';
+	strHtml += '</div>';
+	strHtml += '</div>';
+	strHtml += '</form>';
+
+	strHtml += '<div id="querylistdiv">';
+	strHtml += '<table class="table">';
+	strHtml += '<thead>';
+	strHtml += '<tr>';
+	strHtml += '<th>产品编号</th>';
+	strHtml += '<th>产品名称</th>';
+	strHtml += '<th>配送周期</th>';
+	strHtml += '<th>价格</th>';
+	strHtml += '<th>内容</th>';
+	strHtml += '<th>备注</th>';
+	strHtml += '</tr>';
+	strHtml += '</thead>';
+	strHtml += '<tbody>';
+	jsonAjax("get", "product/page/" + 1 + "?pagesize=" + _pagesize, function(data) {
+		hideCapion();
+		if (data != null) {
+			if (data.productpage.list != null && data.productpage.list.length > 0) {
+				var products = data.productpage.list;
+
+				var pNum = (parseInt(data.productpage.pageNumber) - 1);
+				var nNum = (parseInt(data.productpage.pageNumber) + 1);
+				var strDisabledP = 'onclick=showProductList("' + pNum + '")';
+				var strDisabledN = ' onclick=showProductList("' + nNum + '")';
+
+				if (data.productpage.pageNumber == 1) {
+					strDisabledP = "";
+				}
+				if (data.productpage.pageNumber == data.productpage.totalPage) {
+					strDisabledN = "";
+				}
+
+				for (i = 0; i < products.length; i++) {
+					strHtml += '<tr ondblclick="dbclickProductCallBack(this);">';
+					strHtml += '<td>' + products[i].productid + '</td>';
+					strHtml += '<td>' + products[i].productname + '</td>';
+					strHtml += '<td align="center">' + products[i].cycle + '</td>';
+					strHtml += '<td align="right">' + products[i].price + '</td>';
+					strHtml += '<td>' + products[i].details + '</td>';
+					strHtml += '<td>' + products[i].remark + '</td>';
+					strHtml += '</tr>';
+				}
+				strHtml += '</tbody>';
+				strHtml += '</table>';
+				strHtml += '<ul class="pager"> ';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledP + '>&larr; 上一页</a></li>&nbsp;';
+				strHtml += '<span>' + data.productpage.pageNumber + '/' + data.productpage.totalPage + '&nbsp;&nbsp;总条数：' + data.productpage.totalRow + ' </span>';
+				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledN + ' >下一页  &rarr;</a></li>';
+				strHtml += '</ul>';
+			}
+		}
+		strHtml += '</div>';
+		$("#listinfo").html(strHtml);
+		$("#closelistbtn").click(closeListPage);
+		showMask();
+		showListCapionByDivId("#listdiv");
+	});
 }
 
 function showProductList(pagenum) {
@@ -230,15 +321,11 @@ function showProductList(pagenum) {
 		pagenum = "";
 	}
 
-	closeListPage();
-	showCapion();
-	jsonAjax("get", "product/page/" + pagenum, function(data) {
-		hideCapion();
+	var formParam = $("#querylistform").serialize();// 序列化表格内容为字符串
+
+	jsonAjaxForm("get", "product/page/" + pagenum, formParam, function(data) {
 		if (data != null) {
 			var strHtml = "";
-			strHtml += '<div>';
-			strHtml += '<button id="closelistbtn" type="button" class="close" aria-hidden="true">&times;</button>';
-			strHtml += '</div>';
 			strHtml += '<table class="table">';
 			strHtml += '<thead>';
 			strHtml += '<tr>';
@@ -247,6 +334,7 @@ function showProductList(pagenum) {
 			strHtml += '<th>配送周期</th>';
 			strHtml += '<th>价格</th>';
 			strHtml += '<th>内容</th>';
+			strHtml += '<th>备注</th>';
 			strHtml += '</tr>';
 			strHtml += '</thead>';
 			strHtml += '<tbody>';
@@ -269,9 +357,10 @@ function showProductList(pagenum) {
 					strHtml += '<tr ondblclick="dbclickProductCallBack(this);">';
 					strHtml += '<td>' + products[i].productid + '</td>';
 					strHtml += '<td>' + products[i].productname + '</td>';
-					strHtml += '<td>' + products[i].cycle + '</td>';
+					strHtml += '<td align="center">' + products[i].cycle + '</td>';
 					strHtml += '<td align="right">' + products[i].price + '</td>';
 					strHtml += '<td>' + products[i].details + '</td>';
+					strHtml += '<td>' + products[i].remark + '</td>';
 					strHtml += '</tr>';
 				}
 				strHtml += '</tbody>';
@@ -282,9 +371,7 @@ function showProductList(pagenum) {
 				strHtml += '<li ><a href="javascript:void(0);" ' + strDisabledN + ' >下一页  &rarr;</a></li>';
 				strHtml += '</ul>';
 			}
-			$("#listinfo").html(strHtml);
-			$("#closelistbtn").click(closeListPage);
-			showCapionByDivId("#listdiv");
+			$("#querylistdiv").html(strHtml);
 		} else {
 			showCapionMsg("未知错误！");
 		}

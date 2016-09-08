@@ -2,6 +2,7 @@ package com.nstc.sanmuyuan.model;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.plugin.activerecord.ActiveRecordException;
 import com.jfinal.plugin.activerecord.Db;
@@ -119,7 +120,7 @@ public class Product extends BaseProduct<Product> {
 		}
 	}
 
-	public Page<Product> paginate(int pageNumber, int pageSize) {
+	public Page<Product> paginate(Map<String, String> params, int pageNumber, int pageSize) {
 		String select = "select p.productid,p.productname,p.cycle,FORMAT(p.price,2)price,t.detail details,ifnull(p.remark,'')remark";
 
 		StringBuffer subquery = new StringBuffer("select");
@@ -131,8 +132,21 @@ public class Product extends BaseProduct<Product> {
 		subquery.append("	PRODUCT_ITEM pi left join COMMODITIES c on c.cid = pi.cid");
 		subquery.append(" group by  pi.productid");
 
-		String sqlExceptSelect = "from PRODUCT p left join (" + subquery + ")t on t.productid=p.productid order by p.productid";
+		String sqlExceptSelect = "from PRODUCT p left join (" + subquery + ")t on t.productid=p.productid ";
+		sqlExceptSelect += " where 1=1 ";
+		if (params != null && params.size() > 0) {
+			if (params.get("productid") != null && !params.get("productid").equals("")) {
+				sqlExceptSelect += " and p.productid like '%" + params.get("productid") + "%'";
+			}
+			if (params.get("productname") != null && !params.get("productname").equals("")) {
+				sqlExceptSelect += " and p.productname like '%" + params.get("productname") + "%'";
+			}
+			if (params.get("remark") != null && !params.get("remark").equals("")) {
+				sqlExceptSelect += " and p.remark like '%" + params.get("remark") + "%'";
+			}
 
+		}
+		sqlExceptSelect += " order by p.productid";
 		return paginate(pageNumber, pageSize, select, sqlExceptSelect);
 	}
 }

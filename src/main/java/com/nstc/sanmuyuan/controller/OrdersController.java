@@ -1,6 +1,8 @@
 package com.nstc.sanmuyuan.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
@@ -102,6 +104,14 @@ public class OrdersController extends Controller {
 	}
 
 	public void page() {
-		renderJson("orderpage", Orders.dao.paginate(getParaToInt(0, 1), 6));
+		int pagesize = getParaToInt("pagesize", 10);
+
+		Map<String, String> params = new HashMap<String, String>();
+
+		params.put("orderid", getPara("orderid"));
+		params.put("nickname", getPara("nickname"));
+		params.put("remark", getPara("remark"));
+
+		renderJson("orderpage", Orders.dao.paginate(params, getParaToInt(0, 1), pagesize));
 	}
 }

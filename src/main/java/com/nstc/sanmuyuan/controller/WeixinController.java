@@ -25,6 +25,49 @@ public class WeixinController extends Controller {
 		renderJson(users);
 	}
 
+	public void save() {
+		weiXinUserService = new WeiXinUserServiceImpl();
+
+		ResultMessage message = new ResultMessage();
+		try {
+			boolean reslut = weiXinUserService.save(getModel(WeixinUser.class));
+			if (reslut) {
+				message.setResultMsg("操作成功！");
+			} else {
+				message.setResultMsg("操做失败！");
+			}
+		} catch (Exception e) {
+			message.setResultCode(-1);
+			message.setResultMsg("操做失败！");
+			log.error(e.getMessage());
+		} finally {
+			renderJson(message);
+		}
+
+	}
+	public void del() {
+		String strOpenid = getPara("openid");
+		
+		weiXinUserService = new WeiXinUserServiceImpl();
+		
+		ResultMessage message = new ResultMessage();
+		try {
+			boolean reslut = weiXinUserService.del(strOpenid);
+			if (reslut) {
+				message.setResultMsg("操作成功！");
+			} else {
+				message.setResultMsg("操做失败！");
+			}
+		} catch (Exception e) {
+			message.setResultCode(-1);
+			message.setResultMsg("操做失败！");
+			log.error(e.getMessage());
+		} finally {
+			renderJson(message);
+		}
+		
+	}
+
 	public void sync() throws Exception {
 		weiXinUserService = new WeiXinUserServiceImpl();
 
@@ -167,6 +210,13 @@ public class WeixinController extends Controller {
 	}
 
 	public void page() {
-		renderJson("weixinuserpage", WeixinUser.dao.paginate(getParaToInt(0, 1), 6));
+		int pagesize = getParaToInt("pagesize", 10);
+
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("weixinuserid", getPara("weixinuserid"));
+		params.put("nickname", getPara("nickname"));
+		params.put("remark", getPara("remark"));
+
+		renderJson("weixinuserpage", WeixinUser.dao.paginate(params, getParaToInt(0, 1), pagesize));
 	}
 }

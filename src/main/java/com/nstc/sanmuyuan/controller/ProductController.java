@@ -1,7 +1,9 @@
 package com.nstc.sanmuyuan.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -127,6 +129,13 @@ public class ProductController extends Controller {
 	}
 
 	public void page() {
-		renderJson("productpage", Product.dao.paginate(getParaToInt(0, 1), 6));
+		int pagesize = getParaToInt("pagesize", 10);
+
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("productid", getPara("productid"));
+		params.put("productname", getPara("productname"));
+		params.put("remark", getPara("remark"));
+
+		renderJson("productpage", Product.dao.paginate(params,getParaToInt(0, 1), pagesize));
 	}
 }
